@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TenBackend", "TenBackend\TenBackend.csproj", "{44C44FA4-0B7A-41CF-8580-8A3C8F1B1157}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TenBackend.Tests", "TenBackend.Tests\TenBackend.Tests.csproj", "{40C8D118-38D7-4F03-B9AC-C8A54EBF370A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44C44FA4-0B7A-41CF-8580-8A3C8F1B1157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44C44FA4-0B7A-41CF-8580-8A3C8F1B1157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44C44FA4-0B7A-41CF-8580-8A3C8F1B1157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44C44FA4-0B7A-41CF-8580-8A3C8F1B1157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C8D118-38D7-4F03-B9AC-C8A54EBF370A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C8D118-38D7-4F03-B9AC-C8A54EBF370A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C8D118-38D7-4F03-B9AC-C8A54EBF370A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C8D118-38D7-4F03-B9AC-C8A54EBF370A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
