@@ -121,6 +121,5 @@ E:\vspros\TenBackend\TenBackend\bin\Microsoft.Owin.Security.Google.xml
 E:\vspros\TenBackend\TenBackend\bin\Microsoft.Owin.Security.Twitter.xml
 E:\vspros\TenBackend\TenBackend\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 E:\vspros\TenBackend\TenBackend\bin\System.Web.Http.Owin.xml
-E:\vspros\TenBackend\TenBackend\obj\Debug\TenBackend.csprojResolveAssemblyReference.cache
 E:\vspros\TenBackend\TenBackend\obj\Debug\TenBackend.dll
 E:\vspros\TenBackend\TenBackend\obj\Debug\TenBackend.pdb
