@@ -1,0 +1,122 @@
+﻿@model TenBackend.Models.TenUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TenUser</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.user_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.user_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.gender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.birth_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.birth_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.joined_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.joined_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.last_login_datetime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.last_login_datetime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.p_coin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.p_coin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.outer_score)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.outer_score)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.inner_score)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.inner_score)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.energy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.energy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.quote)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.quote)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.latitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.latitude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.longitude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.longitude)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.user_index }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
