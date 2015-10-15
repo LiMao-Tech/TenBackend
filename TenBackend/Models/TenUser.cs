@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.Spatial;
-
 namespace TenBackend.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
     [Table("limao.TenUsers")]
-    public class TenUser
+    public partial class TenUser
     {
         [Key]
         public int user_index { get; set; }
@@ -20,6 +19,8 @@ namespace TenBackend.Models
         [Required]
         [StringLength(32)]
         public string user_name { get; set; }
+
+        public byte phone_type { get; set; }
 
         public byte gender { get; set; }
 
@@ -46,14 +47,5 @@ namespace TenBackend.Models
         public double? latitude { get; set; }
 
         public double? longitude { get; set; }
-    }
-
-    public class TenUserDbContext : DbContext {
-
-        public TenUserDbContext() : base("TenUserDbConnection")
-        {
-        }
-
-        public System.Data.Entity.DbSet<TenBackend.Models.TenUser> TenUsers { get; set; }
     }
 }

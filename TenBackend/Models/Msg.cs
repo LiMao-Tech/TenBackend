@@ -17,21 +17,14 @@ namespace TenBackend.Models
 
         public int msg_receiver { get; set; }
 
+        public bool msg_is_locked { get; set; }
+
+        public byte msg_type { get; set; }
+
         public DateTime msg_time { get; set; }
 
         [Required]
-        [StringLength(1024)]
+        [StringLength(512)]
         public string msg_content { get; set; }
-    }
-
-    public class MsgDbContext : DbContext
-    {
-
-        public MsgDbContext()
-            : base("TenUserDbConnection")
-        {
-        }
-
-        public System.Data.Entity.DbSet<TenBackend.Models.Msg> TenUsers { get; set; }
     }
 }

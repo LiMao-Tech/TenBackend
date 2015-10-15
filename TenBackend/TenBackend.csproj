@@ -210,7 +210,11 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Msg.cs" />
+    <Compile Include="Models\MsgDbContext.cs" />
+    <Compile Include="Models\PcoinTrans.cs" />
+    <Compile Include="Models\PcoinTransDbContext.cs" />
     <Compile Include="Models\TenUser.cs" />
+    <Compile Include="Models\TenUserDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -281,6 +285,11 @@
     <Content Include="Views\TenUsers\Edit.cshtml" />
     <Content Include="Views\TenUsers\Index.cshtml" />
     <Content Include="Views\TenUsers\Location.cshtml" />
+    <Content Include="Views\Msgs\Create.cshtml" />
+    <Content Include="Views\Msgs\Delete.cshtml" />
+    <Content Include="Views\Msgs\Details.cshtml" />
+    <Content Include="Views\Msgs\Edit.cshtml" />
+    <Content Include="Views\Msgs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
