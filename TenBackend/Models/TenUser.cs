@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Spatial;
+
 namespace TenBackend.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     [Table("limao.TenUsers")]
-    public partial class TenUser
+    public class TenUser
     {
         [Key]
         public int user_index { get; set; }
@@ -15,6 +15,10 @@ namespace TenBackend.Models
         [Required]
         [StringLength(32)]
         public string user_id { get; set; }
+
+        [Required]
+        [StringLength(32)]
+        public string user_pw { get; set; }
 
         [Required]
         [StringLength(32)]

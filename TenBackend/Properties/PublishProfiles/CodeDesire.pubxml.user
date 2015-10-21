@@ -161,7 +161,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/22/2015 22:01:48</publishTime>
     </File>
     <File Include="bin/TenBackend.dll">
-      <publishTime>09/27/2015 21:56:23</publishTime>
+      <publishTime>10/17/2015 21:55:45</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>08/22/2015 22:01:49</publishTime>
@@ -277,6 +277,24 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/TenUsers/Location.cshtml">
       <publishTime>08/30/2015 15:11:38</publishTime>
     </File>
+    <File Include="Views/TenUsersMgt/Create.cshtml">
+      <publishTime>08/30/2015 14:46:18</publishTime>
+    </File>
+    <File Include="Views/TenUsersMgt/Delete.cshtml">
+      <publishTime>08/30/2015 14:46:18</publishTime>
+    </File>
+    <File Include="Views/TenUsersMgt/Details.cshtml">
+      <publishTime>08/30/2015 14:46:18</publishTime>
+    </File>
+    <File Include="Views/TenUsersMgt/Edit.cshtml">
+      <publishTime>08/30/2015 14:46:18</publishTime>
+    </File>
+    <File Include="Views/TenUsersMgt/Index.cshtml">
+      <publishTime>08/30/2015 14:46:18</publishTime>
+    </File>
+    <File Include="Views/TenUsersMgt/Location.cshtml">
+      <publishTime>08/30/2015 15:11:38</publishTime>
+    </File>
     <File Include="Views/Web.config">
       <publishTime>08/22/2015 22:01:43</publishTime>
     </File>
@@ -284,7 +302,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/22/2015 22:01:43</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/13/2015 19:47:43</publishTime>
+      <publishTime>10/17/2015 21:55:48</publishTime>
     </File>
   </ItemGroup>
 </Project>
