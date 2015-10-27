@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Spatial;
-
 namespace TenBackend.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
     [Table("limao.TenUsers")]
-    public class TenUser
+    public partial class TenUser
     {
         [Key]
         public int user_index { get; set; }
@@ -23,6 +23,14 @@ namespace TenBackend.Models
         [Required]
         [StringLength(32)]
         public string user_name { get; set; }
+
+        [Required]
+        [MaxLength(16)]
+        public byte[] device_uuid { get; set; }
+
+        [Required]
+        [MaxLength(64)]
+        public byte[] device_token { get; set; }
 
         public byte phone_type { get; set; }
 
@@ -44,6 +52,9 @@ namespace TenBackend.Models
         public int inner_score { get; set; }
 
         public int energy { get; set; }
+
+        [StringLength(128)]
+        public string hobby { get; set; }
 
         [StringLength(128)]
         public string quote { get; set; }
