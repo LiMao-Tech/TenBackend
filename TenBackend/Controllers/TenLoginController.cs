@@ -16,12 +16,9 @@ namespace TenBackend.Controllers
         private TenUserDbContext db = new TenUserDbContext();
 
         // POST: api/TenLogin
-        public IHttpActionResult PostTenLogin(TenLoginObj  tlio)
+        public IHttpActionResult PostTenLogin(string user_id, string user_pw, string device_uuid, string device_token, string timesamp, string hash_result)
         {
-            if (ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            TenLoginObj tlio = new TenLoginObj(user_id, user_pw, device_uuid, device_token, timesamp, hash_result);
 
             TenUser tu = db.TenUsers.Where(x => x.user_id == tlio.user_id).FirstOrDefault();
 

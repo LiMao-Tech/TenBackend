@@ -10,57 +10,39 @@ namespace TenBackend.Models
     public partial class TenUser
     {
         [Key]
-        public int user_index { get; set; }
+        public int UserIndex { get; set; }
 
         [Required]
         [StringLength(32)]
-        public string user_id { get; set; }
+        public string UserName { get; set; }
 
-        [Required]
-        [StringLength(32)]
-        public string user_pw { get; set; }
+        public byte PhoneType { get; set; }
 
-        [Required]
-        [StringLength(32)]
-        public string user_name { get; set; }
-
-        [Required]
-        [MaxLength(16)]
-        public byte[] device_uuid { get; set; }
-
-        [Required]
-        [MaxLength(64)]
-        public byte[] device_token { get; set; }
-
-        public byte phone_type { get; set; }
-
-        public byte gender { get; set; }
+        public byte Gender { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime birth_date { get; set; }
+        public DateTime Birthday { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime joined_date { get; set; }
-
-        public DateTime last_login_datetime { get; set; }
+        public DateTime JoinedDate { get; set; }
 
         [Column(TypeName = "money")]
-        public decimal p_coin { get; set; }
+        public decimal PCoin { get; set; }
 
-        public int outer_score { get; set; }
+        public int OuterScore { get; set; }
 
-        public int inner_score { get; set; }
+        public int InnerScore { get; set; }
 
-        public int energy { get; set; }
-
-        [StringLength(128)]
-        public string hobby { get; set; }
+        public int Energy { get; set; }
 
         [StringLength(128)]
-        public string quote { get; set; }
+        public string Hobby { get; set; }
 
-        public double? latitude { get; set; }
+        [StringLength(128)]
+        public string Quote { get; set; }
 
-        public double? longitude { get; set; }
+        public double? Lati { get; set; }
+
+        public double? Longi { get; set; }
     }
 }

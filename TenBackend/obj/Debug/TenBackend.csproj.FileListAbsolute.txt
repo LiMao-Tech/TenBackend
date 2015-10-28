@@ -96,3 +96,4 @@ E:\vspros\TenBackend\TenBackend\bin\System.Web.WebPages.Razor.dll
 E:\vspros\TenBackend\TenBackend\bin\WebGrease.dll
 E:\vspros\TenBackend\TenBackend\obj\Debug\TenBackend.dll
 E:\vspros\TenBackend\TenBackend\obj\Debug\TenBackend.pdb
+E:\vspros\TenBackend\TenBackend\obj\Debug\TenBackend.csprojResolveAssemblyReference.cache
