@@ -12,6 +12,6 @@ namespace TenBackend.Models.DbContexts
             : base("TenDbConnection")
         {
         }
-        public DbSet<TenLogin> TenUsers { get; set; }
+        public DbSet<TenLogin> TenLogins { get; set; }
     }
 }

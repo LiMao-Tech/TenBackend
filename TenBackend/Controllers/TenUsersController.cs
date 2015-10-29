@@ -43,7 +43,7 @@ namespace TenBackend.Controllers
         [ResponseType(typeof(IQueryable<TenUser>))]
         public IQueryable<TenUser> GetTenUser(double nLati, double sLati, double wLongi, double eLongi)
         {
-            return db.TenUsers.Where(tu => tu.latitude < nLati && tu.latitude > sLati && tu.longitude > wLongi && tu.longitude < eLongi);            
+            return db.TenUsers.Where(tu => tu.Lati < nLati && tu.Lati > sLati && tu.Longi > wLongi && tu.Longi < eLongi);            
         }
 
         // PUT: api/TenUsers/5
@@ -55,7 +55,7 @@ namespace TenBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != tenUser.user_index)
+            if (id != tenUser.UserIndex)
             {
                 return BadRequest();
             }
@@ -93,7 +93,7 @@ namespace TenBackend.Controllers
             db.TenUsers.Add(tenUser);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = tenUser.user_index }, tenUser);
+            return CreatedAtRoute("DefaultApi", new { id = tenUser.UserIndex }, tenUser);
         }
 
         // DELETE: api/TenUsers/5
@@ -123,7 +123,7 @@ namespace TenBackend.Controllers
 
         private bool TenUserExists(int id)
         {
-            return db.TenUsers.Count(e => e.user_index == id) > 0;
+            return db.TenUsers.Count(e => e.UserIndex == id) > 0;
         }
     }
 }
