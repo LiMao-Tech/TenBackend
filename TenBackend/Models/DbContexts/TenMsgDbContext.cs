@@ -6,13 +6,13 @@ using System.Web;
 
 namespace TenBackend.Models.DbContexts
 {
-    public class MsgDbContext : DbContext
+    public class TenMsgDbContext : DbContext
     {
-        public MsgDbContext()
+
+        public TenMsgDbContext()
             : base("TenDbConnection")
         {
         }
-
-        public DbSet<Msg> Msgs { get; set; }
+        public DbSet<TenMsg> TenMsgs { get; set; }
     }
 }
