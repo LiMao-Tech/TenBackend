@@ -7,7 +7,7 @@ namespace TenBackend.Models
     using System.Data.Entity.Spatial;
 
     [Table("limao.TenUsers")]
-    public partial class TenUser
+    public class TenUser
     {
         [Key]
         public int UserIndex { get; set; }
@@ -34,6 +34,9 @@ namespace TenBackend.Models
         public int InnerScore { get; set; }
 
         public int Energy { get; set; }
+
+        [StringLength(256)]
+        public string ProfileUrl { get; set; }
 
         [StringLength(128)]
         public string Hobby { get; set; }

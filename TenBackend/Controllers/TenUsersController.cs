@@ -28,9 +28,9 @@ namespace TenBackend.Controllers
 
         // GET: api/TenUsers/5
         [ResponseType(typeof(TenUser))]
-        public async Task<IHttpActionResult> GetTenUser(int id)
+        public IHttpActionResult GetTenUser(int id)
         {
-            TenUser tenUser = await db.TenUsers.FindAsync(id);
+            TenUser tenUser = db.TenUsers.Find(id);
             if (tenUser == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace TenBackend.Controllers
 
         // PUT: api/TenUsers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutTenUser(int id, TenUser tenUser)
+        public IHttpActionResult PutTenUser(int id, TenUser tenUser)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace TenBackend.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -83,7 +83,7 @@ namespace TenBackend.Controllers
 
         // POST: api/TenUsers
         [ResponseType(typeof(TenUser))]
-        public async Task<IHttpActionResult> PostTenUser(TenUser tenUser)
+        public IHttpActionResult PostTenUser(TenUser tenUser)
         {
             if (!ModelState.IsValid)
             {
@@ -91,23 +91,23 @@ namespace TenBackend.Controllers
             }
 
             db.TenUsers.Add(tenUser);
-            await db.SaveChangesAsync();
+            db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = tenUser.UserIndex }, tenUser);
         }
 
         // DELETE: api/TenUsers/5
         [ResponseType(typeof(TenUser))]
-        public async Task<IHttpActionResult> DeleteTenUser(int id)
+        public IHttpActionResult DeleteTenUser(int id)
         {
-            TenUser tenUser = await db.TenUsers.FindAsync(id);
+            TenUser tenUser = db.TenUsers.Find(id);
             if (tenUser == null)
             {
                 return NotFound();
             }
 
             db.TenUsers.Remove(tenUser);
-            await db.SaveChangesAsync();
+            db.SaveChangesAsync();
 
             return Ok(tenUser);
         }
