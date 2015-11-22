@@ -27,5 +27,17 @@ namespace TenBackend.Models
         [Required]
         [StringLength(512)]
         public string MsgContent { get; set; }
+
+        public TenMsg(int sender, int receiver, byte phoneType,
+                        bool isLocked, DateTime msgTime,
+                        string msgContent)
+        {
+            Sender = sender;
+            Receiver = receiver;
+            PhoneType = phoneType;
+            IsLocked = isLocked;
+            MsgTime = msgTime;
+            MsgContent = msgContent;
+        }
     }
 }

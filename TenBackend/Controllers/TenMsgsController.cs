@@ -18,6 +18,8 @@ using PushSharp;
 using System.IO;
 using PushSharp.Apple;
 using PushSharp.Core;
+using System.Diagnostics;
+using System.Text;
 
 namespace TenBackend.Controllers
 {
@@ -30,7 +32,8 @@ namespace TenBackend.Controllers
         private PushBroker m_pushBroker = new PushBroker();
         private Byte[] m_appleCerti = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PUSH_CERTI_LOC));
 
-        private TenMsgDbContext db = new TenMsgDbContext();
+        private TenMsgDbContext m_db = new TenMsgDbContext();
+        private TenLoginDbContext m_loginDb = new TenLoginDbContext();
 
 
         public TenMsgsController()
@@ -55,19 +58,14 @@ namespace TenBackend.Controllers
         public IQueryable<TenMsg> GetTenMsgs()
         {
 
-            return db.TenMsgs;
+            return m_db.TenMsgs;
         }
 
         // GET: api/TenMsgs/5
         [ResponseType(typeof(TenMsg))]
         public IHttpActionResult GetTenMsg(int id)
         {
-            m_pushBroker.QueueNotification(new AppleNotification()
-                                           .ForDeviceToken("d0d0a5a868b2b70f5f6900a6cbe034facf38050b4402d14b61a68ae6c27b0b92")
-                                           .WithAlert("Hi from TDS!")
-                                           .WithBadge(7)
-                                           .WithSound("sound.caf"));
-            TenMsg tenMsg = db.TenMsgs.Find(id);
+            TenMsg tenMsg = m_db.TenMsgs.Find(id);
             if (tenMsg == null)
             {
                 return NotFound();
@@ -83,19 +81,32 @@ namespace TenBackend.Controllers
 
             if (!ModelState.IsValid)
             {
+
                 return BadRequest(ModelState);
             }
 
-            db.TenMsgs.Add(tenMsg);
-            db.SaveChanges();
+            m_db.TenMsgs.Add(tenMsg);
+            m_db.SaveChanges();
 
             if (tenMsg.PhoneType == 0) // iPhone
             {
+                TenLogin targetLogin = m_loginDb.TenLogins.Where(tl => tl.UserIndex == tenMsg.Receiver).FirstOrDefault();
+
+                Debug.WriteLine("Target Login: " + targetLogin.LastLogin);
+                Debug.WriteLine("Device Token: " + ByteArrayToString(targetLogin.DeviceToken));
+
+                m_pushBroker.QueueNotification(new AppleNotification()
+                                           .ForDeviceToken(ByteArrayToString(targetLogin.DeviceToken))
+                                           .WithAlert(tenMsg.MsgContent)
+                                           .WithBadge(7)
+                                           .WithSound("sound.caf"));
+                /*
                 m_pushBroker.QueueNotification(new AppleNotification()
                                            .ForDeviceToken("d0d0a5a868b2b70f5f6900a6cbe034facf38050b4402d14b61a68ae6c27b0b92")
                                            .WithAlert("Hi from TDS!")
                                            .WithBadge(7)
-                                           .WithSound("sound.caf"));
+                                           .WithSound("sound.caf"));*/
+
             }
             else if (tenMsg.PhoneType == 1) // Android
             {
@@ -123,7 +134,7 @@ namespace TenBackend.Controllers
             
             try
             {
-                db.SaveChanges();
+                m_db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -146,14 +157,14 @@ namespace TenBackend.Controllers
         [ResponseType(typeof(TenMsg))]
         public IHttpActionResult DeleteTenMsg(int id)
         {
-            TenMsg tenMsg = db.TenMsgs.Find(id);
+            TenMsg tenMsg = m_db.TenMsgs.Find(id);
             if (tenMsg == null)
             {
                 return NotFound();
             }
 
-            db.TenMsgs.Remove(tenMsg);
-            db.SaveChanges();
+            m_db.TenMsgs.Remove(tenMsg);
+            m_db.SaveChanges();
 
             return Ok(tenMsg);
         }
@@ -162,14 +173,14 @@ namespace TenBackend.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                m_db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool TenMsgExists(int id)
         {
-            return db.TenMsgs.Count(e => e.MsgIndex == id) > 0;
+            return m_db.TenMsgs.Count(e => e.MsgIndex == id) > 0;
         }
 
         static void DeviceSubscriptionChanged(object sender, string oldSubscriptionId, string newSubscriptionId, INotification notification)
@@ -211,6 +222,14 @@ namespace TenBackend.Controllers
         static void ChannelCreated(object sender, IPushChannel pushChannel)
         {
             Console.WriteLine("Channel Created for: " + sender);
+        }
+
+        static string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
         }
     }
 }

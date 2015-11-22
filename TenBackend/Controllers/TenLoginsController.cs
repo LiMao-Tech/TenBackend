@@ -42,6 +42,7 @@ namespace TenBackend.Controllers
         public IHttpActionResult GetTenLogin(string userID, string userPWD, string lastLogin, string DeviceUUID, string DeviceToken, string HashValue)
         {
             TenLogin tenLogin = tldb.TenLogins.Where(x => x.UserID.CompareTo(userID) == 0).FirstOrDefault();
+
             if (tenLogin == null)
             {
                 return NotFound();

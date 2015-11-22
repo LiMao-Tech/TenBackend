@@ -9,7 +9,7 @@ namespace TenBackend.Infrastructure
 {
     public class TenMsgMediaMapping : MediaTypeMapping
     {
-        public TenMsgMediaMapping() : base("application/x.msg")
+        public TenMsgMediaMapping() : base("application/x.tenmsg")
         {
 
         }

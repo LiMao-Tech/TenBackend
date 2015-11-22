@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,10 +21,13 @@ namespace TenBackend.Infrastructure
         private string controllerName;
 
         public TenMsgMediaFormatter() {
-            //SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/x.product"));
+            
+            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
+            
             SupportedEncodings.Add(Encoding.Unicode);
             SupportedEncodings.Add(Encoding.UTF8);
-            MediaTypeMappings.Add(new TenMsgMediaMapping());
+            // Debug.WriteLine("Formatter Constructed");
+            // MediaTypeMappings.Add(new TenMsgMediaMapping());
         }
 
         public TenMsgMediaFormatter(string controllerArg)
@@ -29,49 +35,47 @@ namespace TenBackend.Infrastructure
             controllerName = controllerArg;
         }
 
+        // Serialization Support
         public override bool CanReadType(Type type) {
-            return false;
+            return type == typeof(TenMsg);
         }
 
         public override bool CanWriteType(Type type) {
-            return type == typeof(TenMsg) || type == typeof(IEnumerable<TenMsg>);
+            return false;
+            // return type == typeof(TenMsg);
         }
 
-        public override void SetDefaultContentHeaders(Type type,
-                HttpContentHeaders headers, MediaTypeHeaderValue mediaType) {
-            base.SetDefaultContentHeaders(type, headers, mediaType);
-            headers.Add("X-ModelType",
-                type == typeof(IEnumerable<TenMsg>)
-                    ? "IEnumerable<TenMsg>" : "TenMsg");
-            headers.Add("X-MediaType", mediaType.MediaType);
-        }
+        public override async Task<object> ReadFromStreamAsync(Type type, Stream stream,
+                                                        HttpContent httpContent,
+                                                        IFormatterLogger iFormatterLogger)
+        {
+            MultipartStreamProvider parts = await httpContent.ReadAsMultipartAsync();
+            IEnumerable<HttpContent> contents = parts.Contents;
 
-        public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type,
-                HttpRequestMessage request, MediaTypeHeaderValue mediaType) {
-                    return new TenMsgMediaFormatter(
-                request.GetRouteData().Values["controller"].ToString());
-        }
-
-        public override async Task WriteToStreamAsync(Type type, object value,
-                Stream writeStream, HttpContent content,
-                TransportContext transportContext) {
-
-            List<string> productStrings = new List<string>();
-            IEnumerable<TenMsg> msgs = value is TenMsg ? new TenMsg[] { (TenMsg)value } : (IEnumerable<TenMsg>)value;
-
-            foreach (TenMsg msg in msgs)
-            {
-                productStrings.Add(string.Format("{0},{1},{2}",
-                    product.ProductID,
-                    controllerName == null ? product.Name :
-                        string.Format("{0} ({1})", product.Name, controllerName),
-                    product.Price));
+            HttpContent content = contents.FirstOrDefault();
+            foreach (HttpContent c in contents ) {
+                if (SupportedMediaTypes.Contains(c.Headers.ContentType)) {
+                    content = c;
+                    break;
+                }
             }
 
-            Encoding enc = SelectCharacterEncoding(content.Headers);
-            StreamWriter writer = new StreamWriter(writeStream, enc ?? Encoding.Unicode);
-            await writer.WriteAsync(string.Join(",", productStrings));
-            writer.Flush();
+            using (var msgStream = await content.ReadAsStreamAsync())
+            {
+                DataContractJsonSerializer js = new DataContractJsonSerializer(typeof(TenMsg));
+                TenMsg msg = (TenMsg)js.ReadObject(msgStream);
+                Debug.WriteLine("msgString: " + msgStream.ToString());
+
+                int sender = msg.Sender;
+                int receiver = msg.Receiver;
+                byte phoneType = msg.PhoneType;
+                bool isLocked = msg.IsLocked;
+                DateTime msgTime = msg.MsgTime;
+                string msgContent = msg.MsgContent;
+                Debug.WriteLine("Msg Content: " + msg.MsgContent);
+                
+                return new TenMsg(sender, receiver, phoneType, isLocked, msgTime, msgContent);
+            }
         }
     }
 }
