@@ -12,7 +12,9 @@ namespace TenBackend.Controllers
 {
     public class TenImageController : Controller
     {
-       private TenImageDbContext db = new TenImageDbContext();
+        static string IMAGE_PATH = "D:/TenImages";
+        private TenImageDbContext db = new TenImageDbContext();
+        
 
         /// <summary>
         /// 上传头像
@@ -23,23 +25,45 @@ namespace TenBackend.Controllers
         {
             if (upload != null && upload.ContentLength > 0)
             {
-               
+
                 TenImage profile = db.TenImages.FirstOrDefault(img => img.ImageType == ImageType.Profile && img.UserIndex == id);
-                profile.FileName = id + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName);
-                profile.ContentType = upload.ContentType;
-                profile.UploadTime = DateTime.Now;
-                upload.SaveAs(Path.Combine(profile.BasePath, profile.FileName));
 
-                TenUserDbContext udb = new TenUserDbContext();
-                TenUser tenuser = udb.TenUsers.Find(id);
-                tenuser.ProfileUrl = Path.Combine(profile.BasePath, profile.FileName);
-                udb.Entry(tenuser).State = EntityState.Modified;
-                udb.SaveChanges();
+                if (profile != null)
+                {
+                    profile.FileName = id + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName);
+                    profile.ContentType = upload.ContentType;
+                    profile.UploadTime = DateTime.Now;
+                    upload.SaveAs(Path.Combine(profile.BasePath, profile.FileName));
 
-                db.Entry(profile).State = EntityState.Modified;
-                db.SaveChanges();
 
-                return Json(tenuser);
+                    db.Entry(profile).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    ChangeUserProfile(id, Path.Combine(profile.BasePath, profile.FileName));
+
+                    return Json("success");
+
+                }
+                else
+                {
+                    var newProfile = new TenImage
+                    {
+                        FileName = id + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName),
+                        ContentType = upload.ContentType,
+                        BasePath = Path.Combine(IMAGE_PATH),
+                        ImageType = ImageType.Profile,
+                        UploadTime = DateTime.Now,
+                        UserIndex = id
+                    };
+                    upload.SaveAs(Path.Combine(newProfile.BasePath, newProfile.FileName));
+                    db.TenImages.Add(newProfile);
+                    db.SaveChanges();
+
+                    ChangeUserProfile(id, Path.Combine(newProfile.BasePath, newProfile.FileName));
+
+                    return Json("success");
+
+                }
 
             }
 
@@ -62,7 +86,7 @@ namespace TenBackend.Controllers
                     {
                         FileName = id + "_" + Guid.NewGuid().ToString()+System.IO.Path.GetFileName(upload.FileName),
                         ContentType = upload.ContentType,
-                        BasePath = Path.Combine(Server.MapPath("~/images")),
+                        BasePath = Path.Combine(IMAGE_PATH),
                         ImageType = ImageType.Photo,
                         UploadTime = DateTime.Now,
                         UserIndex = id
@@ -140,7 +164,7 @@ namespace TenBackend.Controllers
                 {
                     FileName = "msg_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName),
                     ContentType = upload.ContentType,
-                    BasePath = Path.Combine(Server.MapPath("~/images")),
+                    BasePath = Path.Combine(IMAGE_PATH),
                     ImageType = ImageType.Message,
                     UploadTime = DateTime.Now,
                     MsgIndex = id
@@ -154,7 +178,14 @@ namespace TenBackend.Controllers
             return Json("noImage");
         }
 
-       
+        private void ChangeUserProfile(int id, string profileUrl)
+        {
+            TenUserDbContext udb = new TenUserDbContext();
+            TenUser tenuser = udb.TenUsers.Find(id);
+            tenuser.ProfileUrl = profileUrl;
+            udb.Entry(tenuser).State = EntityState.Modified;
+            udb.SaveChanges();
+        }
     
 	}
 }
