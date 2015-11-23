@@ -35,6 +35,9 @@ namespace TenBackend.Models
 
         public int Energy { get; set; }
 
+        [StringLength(256)]
+        public string ProfileUrl { get; set; }
+
         [StringLength(128)]
         public string Hobby { get; set; }
 
