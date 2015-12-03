@@ -107,17 +107,33 @@ namespace TenBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.PCoinTrans.Add(pcointrans);
-            db.SaveChanges();
+            
 
             //更新用户Pcoin信息
             TenUser uSender = db.TenUsers.Find(pcointrans.Sender);
             TenUser uReciver = db.TenUsers.Find(pcointrans.Receiver);
-            uSender.PCoin = uSender.PCoin - pcointrans.Amount;
-            uReciver.PCoin = uReciver.PCoin + pcointrans.Amount;
-            db.Entry(uSender).State = EntityState.Modified;
-            db.Entry(uReciver).State = EntityState.Modified;
-            db.SaveChanges();
+
+            decimal offset = uSender.PCoin-pcointrans.Amount;
+            //余额不足
+            if (offset < 0)
+            {
+                return BadRequest("insufficient Balance");
+            }
+
+            try
+            {
+                uSender.PCoin = offset;
+                uReciver.PCoin = uReciver.PCoin + pcointrans.Amount;
+                db.Entry(uSender).State = EntityState.Modified;
+                db.Entry(uReciver).State = EntityState.Modified;
+                db.PCoinTrans.Add(pcointrans);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("failed, details:" + e.ToString());
+            }
+            
 
             //发送通知
             if (pcointrans.PhoneType == 0)
