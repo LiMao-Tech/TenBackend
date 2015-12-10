@@ -110,17 +110,21 @@ namespace TenBackend.Controllers
         /// 删除照片
         /// </summary>
         /// <param name="id">图片ID</param>
+        [HttpPost]
         public JsonResult DeletePhoto(int id)
         {
             try
             {
                 TenImage image = db.TenImages.Find(id);
+                if (image == null)
+                {
+                    return Json("404 no such image");
+                }
                 string path = Path.Combine(image.BasePath, image.FileName);
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
                 }
-                db.SaveChanges();
                 db.TenImages.Remove(image);
                 db.SaveChanges();
                 return Json("success");
