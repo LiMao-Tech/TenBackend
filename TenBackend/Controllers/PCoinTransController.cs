@@ -45,6 +45,10 @@ namespace TenBackend.Controllers
         }
         private TenBackendDbContext db = new TenBackendDbContext();
 
+
+        /// <summary>
+        /// Gets all PcoinTrans data from the server.
+        /// </summary>
         // GET api/PCoinTrans
         public IQueryable<PCoinTrans> GetPCoinTrans()
         {
@@ -52,16 +56,27 @@ namespace TenBackend.Controllers
         }
 
         // GET api/PCoinTrans/5
-        [ResponseType(typeof(PCoinTrans))]
-        public IHttpActionResult GetPCoinTrans(int id)
-        {
-            PCoinTrans pcointrans = db.PCoinTrans.Find(id);
-            if (pcointrans == null)
-            {
-                return NotFound();
-            }
+        //[ResponseType(typeof(PCoinTrans))]
+        //public IHttpActionResult GetPCoinTrans(int id)
+        //{
+        //    PCoinTrans pcointrans = db.PCoinTrans.Find(id);
+        //    if (pcointrans == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(pcointrans);
+        //    return Ok(pcointrans);
+        //}
+
+        //GET api/PCoinTrans?userindex=5
+        /// <summary>
+        /// Get all trans records of the userindex user
+        /// </summary>
+        [ResponseType(typeof(IQueryable<PCoinTrans>))]
+        public IQueryable<PCoinTrans> GetPCoinTrans(int userindex)
+        {
+          
+            return db.PCoinTrans.Where(p => p.Sender == userindex || p.Receiver == userindex);
         }
 
         // PUT api/PCoinTrans/5
@@ -99,6 +114,9 @@ namespace TenBackend.Controllers
         }
 
         // POST api/PCoinTrans
+        /// <summary>
+        /// Add a row of trans data
+        /// </summary>
         [ResponseType(typeof(PCoinTrans))]
         public IHttpActionResult PostPCoinTrans(PCoinTrans pcointrans)
         {
@@ -141,7 +159,7 @@ namespace TenBackend.Controllers
                 TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == pcointrans.Receiver).FirstOrDefault();
                 m_pushBroker.QueueNotification(new AppleNotification()
                                           .ForDeviceToken(targetLogin.DeviceToken)
-                                          .WithAlert(pcointrans.Note)
+                                          .WithAlert(new StringBuilder().Append(uSender.UserName).Append("向您转账了一笔PCoin").ToString())
                                           .WithBadge(7)
                                           .WithSound("sound.caf"));
             }

@@ -18,12 +18,19 @@ namespace TenBackend.Controllers
         private TenBackendDbContext db = new TenBackendDbContext();
 
         // GET api/TenUsers
+        /// <summary>
+        /// Get all the TenUser datas
+        /// </summary>
         public IQueryable<TenUser> GetTenUsers()
         {
             return db.TenUsers;
         }
 
         // GET api/TenUsers/5
+        /// <summary>
+        /// Get the special TenUser data
+        /// </summary>
+        /// <param name="id">Value of UserIndex</param>
         [ResponseType(typeof(TenUser))]
         public IHttpActionResult GetTenUser(int id)
         {
@@ -37,6 +44,9 @@ namespace TenBackend.Controllers
         }
 
         // GET: api/TenUsers?nLati=...&sLati=...&wLongi=...&eLongi=...
+        /// <summary>
+        /// Get the special TenUsers of the location
+        /// </summary>
         [ResponseType(typeof(IQueryable<TenUser>))]
         public IQueryable<TenUser> GetTenUser(double nLati, double sLati, double wLongi, double eLongi)
         {
@@ -46,6 +56,9 @@ namespace TenBackend.Controllers
 
 
         // PUT api/TenUsers/5
+        /// <summary>
+        /// Update TenUser
+        /// </summary>
         public IHttpActionResult PutTenUser(int id, TenUser tenuser)
         {
             if (!ModelState.IsValid)
@@ -79,6 +92,9 @@ namespace TenBackend.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }       
                 // POST api/TenUsers
+        /// <summary>
+        /// Add a row of TenUser data
+        /// </summary>
        [ResponseType(typeof(TenUser))]
       public IHttpActionResult PostTenUser(TenUser tenuser)
         {
@@ -96,6 +112,10 @@ namespace TenBackend.Controllers
          }
         
         // DELETE api/TenUsers/5
+       /// <summary>
+       /// Delete the special TenUser
+       /// </summary>
+       /// <param name="id">Value of UserIndex</param>
         [ResponseType(typeof(TenUser))]
         public IHttpActionResult DeleteTenUser(int id)
         {

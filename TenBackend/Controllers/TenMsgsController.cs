@@ -54,6 +54,10 @@ namespace TenBackend.Controllers
         }
 
         // GET api/TenMsgs/5
+        /// <summary>
+        /// Get the special msg data
+        /// </summary>
+        /// <param name="id">Value of the MsgIndex</param>
         [ResponseType(typeof(TenMsg))]
         public IHttpActionResult GetTenMsg(int id)
         {
@@ -113,6 +117,9 @@ namespace TenBackend.Controllers
 
 
         // POST api/TenMsgs
+        /// <summary>
+        /// Add a row of Msg data
+        /// </summary>
         [ResponseType(typeof(TenMsg))]
         public IHttpActionResult PostTenMsg(TenMsg tenmsg)
         {

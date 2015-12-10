@@ -19,6 +19,9 @@ namespace TenBackend.Controllers
         static string companyCode = "e40cb24cffee7767d8f3bd9faf882af614b9e4bd402dc53a70f4723cde991734";
         private TenBackendDbContext db = new TenBackendDbContext();
 
+        /// <summary>
+        /// Gets all TenLogin data from the server.
+        /// </summary>
         // GET api/TenLogins
         public IQueryable<TenLogin> GetTenLogins()
         {
@@ -26,6 +29,10 @@ namespace TenBackend.Controllers
         }
 
         // GET api/TenLogins/5
+        /// <summary>
+        /// Get the special Tenlogin data
+        /// </summary>
+        /// <param name="id">The key in the Tenlogin table</param>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult GetTenLogin(int id)
         {
@@ -38,6 +45,9 @@ namespace TenBackend.Controllers
             return Ok(tenlogin);
         }
          // GET: api/TenLogins/5
+        /// <summary>
+        /// Sign in to the server
+        /// </summary>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult GetTenLogin(string userID, string userPWD, string lastLogin, string DeviceUUID, string DeviceToken, string HashValue)
         {
@@ -87,6 +97,10 @@ namespace TenBackend.Controllers
        
 
         // PUT api/TenLogins/5
+        /// <summary>
+        /// Update the special Tenlogin data
+        /// </summary>
+        /// <param name="id">The value of LoginIndex</param>
         public IHttpActionResult PutTenLogin(int id, TenLogin tenlogin)
         {
             if (!ModelState.IsValid)
@@ -96,7 +110,7 @@ namespace TenBackend.Controllers
 
             if (id != tenlogin.LoginIndex)
             {
-                return BadRequest();
+                return BadRequest("4002");//参数不匹配
             }
 
             db.Entry(tenlogin).State = EntityState.Modified;
@@ -117,10 +131,13 @@ namespace TenBackend.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(tenlogin);
         }
 
         // POST api/TenLogins
+        /// <summary>
+        /// Add a row of a TenLogin data
+        /// </summary>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult PostTenLogin(TenLogin tenlogin)
         {
@@ -128,7 +145,13 @@ namespace TenBackend.Controllers
             {
                 return BadRequest(ModelState);
             }
-           // tenlogin.LastLogin = DateTime.Now;
+
+            TenLogin t = db.TenLogins.Where(e => e.UserID == tenlogin.UserID).FirstOrDefault();
+            if (t != null)
+            {
+                return BadRequest("4001");//用户存在
+            }
+
             db.TenLogins.Add(tenlogin);
             db.SaveChanges();
 
@@ -136,6 +159,10 @@ namespace TenBackend.Controllers
         }
 
         // DELETE api/TenLogins/5
+        /// <summary>
+        /// Delete the special TenLogin data
+        /// </summary>
+        /// <param name="id">The key in the Tenlogin table</param>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult DeleteTenLogin(int id)
         {

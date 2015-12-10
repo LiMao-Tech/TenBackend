@@ -17,6 +17,7 @@ namespace TenBackend.Models
         public string ContentType { get; set; }
         [StringLength(255)]
         public string BasePath { get; set; }
+        public bool IsLocked { get; set; }
         public ImageType ImageType { get; set; }
         [Column(TypeName = "date")]
         public DateTime UploadTime { get; set; }

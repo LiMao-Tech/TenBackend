@@ -50,6 +50,7 @@ namespace TenBackend.Controllers
                         FileName = id + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName),
                         ContentType = upload.ContentType,
                         BasePath = Path.Combine(IMAGE_PATH),
+                        IsLocked = false,
                         ImageType = ImageType.Profile,
                         UploadTime = DateTime.Now,
                         UserIndex = id
@@ -87,6 +88,7 @@ namespace TenBackend.Controllers
                         FileName = id + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName),
                         ContentType = upload.ContentType,
                         BasePath = Path.Combine(IMAGE_PATH),
+                        IsLocked = false,
                         ImageType = ImageType.Photo,
                         UploadTime = DateTime.Now,
                         UserIndex = id
@@ -118,6 +120,7 @@ namespace TenBackend.Controllers
                 {
                     System.IO.File.Delete(path);
                 }
+                db.SaveChanges();
                 db.TenImages.Remove(image);
                 db.SaveChanges();
                 return Json("success");
@@ -166,6 +169,7 @@ namespace TenBackend.Controllers
                     FileName = "msg_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName),
                     ContentType = upload.ContentType,
                     BasePath = Path.Combine(IMAGE_PATH),
+                    IsLocked = false,
                     ImageType = ImageType.Message,
                     UploadTime = DateTime.Now,
                     MsgIndex = id

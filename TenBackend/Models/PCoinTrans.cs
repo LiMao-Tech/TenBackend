@@ -24,14 +24,5 @@ namespace TenBackend.Models
         public DateTime TransTime { get; set; }
         public string Note { get; set; }
 
-        public PCoinTrans(int sender, int receiver,byte phonetype, decimal amount, DateTime transtime, string note)
-        {
-            Sender = sender;
-            Receiver = receiver;
-            PhoneType = phonetype;
-            Amount = amount;
-            TransTime = transtime;
-            Note = note;
-        }
     }
 }
