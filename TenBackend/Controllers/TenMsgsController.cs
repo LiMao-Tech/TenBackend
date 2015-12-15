@@ -22,7 +22,7 @@ namespace TenBackend.Controllers
     public class TenMsgsController : ApiController
     {
         static string PUSH_CERTI_LOC = "./Resources/TenDevMsgPush.p12";
-        static string PUSH_CERTI_PWD = "limao1234";
+        static string PUSH_CERTI_PWD = "199006";
 
 
         private PushBroker m_pushBroker = new PushBroker();
@@ -80,6 +80,26 @@ namespace TenBackend.Controllers
 
             return Ok(tenmsg);
         }
+
+        public IHttpActionResult GetTenMsg(string deviceToken)
+        {
+            try
+            {
+                m_pushBroker.QueueNotification(new AppleNotification()
+                                      .ForDeviceToken(deviceToken)
+                                      .WithAlert("Hi from TDS!")
+                                      .WithBadge(7)
+                                      .WithSound("sound.caf"));
+                return Ok("Send");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+                     
+        }
+
+
 
         // PUT api/TenMsgs/5
         public IHttpActionResult PutTenMsg(int id, TenMsg tenmsg)
