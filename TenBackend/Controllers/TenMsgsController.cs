@@ -21,8 +21,8 @@ namespace TenBackend.Controllers
 {
     public class TenMsgsController : ApiController
     {
-        static string PUSH_CERTI_LOC = "./Resources/TenDevMsgPush.p12";
-        static string PUSH_CERTI_PWD = "199006";
+        static string PUSH_CERTI_LOC = "./Resources/TenPushNotiDev.p12";
+        static string PUSH_CERTI_PWD = "limao1234";
 
 
         private PushBroker m_pushBroker = new PushBroker();
@@ -42,7 +42,7 @@ namespace TenBackend.Controllers
             m_pushBroker.OnChannelCreated += ChannelCreated;
             m_pushBroker.OnChannelDestroyed += ChannelDestroyed;
 
-            m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(m_appleCerti, PUSH_CERTI_PWD));
+            m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(true,m_appleCerti, PUSH_CERTI_PWD));
 
             // push.StopAllServices();
         }
@@ -61,16 +61,6 @@ namespace TenBackend.Controllers
         [ResponseType(typeof(TenMsg))]
         public IHttpActionResult GetTenMsg(int id)
         {
-            if (id == 0)
-            {
-
-                m_pushBroker.QueueNotification(new AppleNotification()
-                                       .ForDeviceToken("80f8577633ca4ece7e5d678a8f789f322e4c39ea8ad8213d183aaf9d05956143")
-                                       .WithAlert("Hi from TDS!")
-                                       .WithBadge(7)
-                                       .WithSound("sound.caf"));
-                return Ok("Send");
-            }
 
             TenMsg tenmsg = db.TenMsgs.Find(id);
             if (tenmsg == null)
@@ -81,6 +71,11 @@ namespace TenBackend.Controllers
             return Ok(tenmsg);
         }
 
+        // GET api/TenMsgs/5
+        /// <summary>
+        /// Notification Test
+        /// </summary>
+        /// <param name="deviceToken">Value of the Mobile DeviceToken</param>
         public IHttpActionResult GetTenMsg(string deviceToken)
         {
             try
@@ -154,13 +149,13 @@ namespace TenBackend.Controllers
             if (tenmsg.PhoneType == 0) // iPhone
             {
                 TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == tenmsg.Receiver).FirstOrDefault();
-
+                TenUser u = db.TenUsers.Find(tenmsg.Sender);
                 Debug.WriteLine("Target Login: " + targetLogin.LastLogin);
                 Debug.WriteLine("Device Token: " + targetLogin.DeviceToken);
 
                 m_pushBroker.QueueNotification(new AppleNotification()
                                            .ForDeviceToken(targetLogin.DeviceToken)
-                                           .WithAlert(tenmsg.MsgContent)
+                                           .WithAlert( u.UserName+": "+tenmsg.MsgContent)
                                            .WithBadge(7)
                                            .WithSound("sound.caf"));
                 /*
