@@ -19,6 +19,18 @@ namespace TenBackend.Controllers
         static string companyCode = "e40cb24cffee7767d8f3bd9faf882af614b9e4bd402dc53a70f4723cde991734";
         private TenBackendDbContext db = new TenBackendDbContext();
 
+
+        /**
+         * 错误代码表:
+         * 4000  用户不存在，用于找回密码
+         * 4001  用户存在
+         * 4002  参数不匹配
+         * 4003  密码错误
+         * 4004  App重装或者其他设备登录，需要修改DeviceUUID,并重新登录
+         * 
+         * */
+
+
         /// <summary>
         /// Gets all TenLogin data from the server.
         /// </summary>
@@ -44,6 +56,22 @@ namespace TenBackend.Controllers
 
             return Ok(tenlogin);
         }
+
+        // POST: api/TenLogins/5
+        /// <summary>
+        /// Get the password
+        /// </summary>
+        [ResponseType(typeof(string))]
+        public IHttpActionResult PostTenLogin(string userID)
+        {
+            TenLogin tenlogin = db.TenLogins.Where(l=>l.UserID == userID).FirstOrDefault();
+            if(tenlogin == null){
+                //用户不存在
+                return BadRequest("4000");
+            }
+
+            return Ok(tenlogin.UserPWD);
+        }
          // GET: api/TenLogins/5
         /// <summary>
         /// Sign in to the server
@@ -60,7 +88,14 @@ namespace TenBackend.Controllers
 
             if (tenLogin.UserPWD != userPWD)
             {
-                return BadRequest("Wrong PWD");
+                //密码错误
+                return BadRequest("4003");
+            }
+
+            if (tenLogin.DeviceUUID != DeviceUUID)
+            {
+                //更换了设备或者应用重装，需要先修改DeviceUUID
+                return BadRequest("4004");
             }
 
             //比较Hash sha-256
