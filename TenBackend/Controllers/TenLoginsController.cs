@@ -22,11 +22,11 @@ namespace TenBackend.Controllers
 
         /**
          * 错误代码表:
-         * 4000  用户不存在，用于找回密码
-         * 4001  用户存在
-         * 4002  参数不匹配
-         * 4003  密码错误
-         * 4004  App重装或者其他设备登录，需要修改DeviceUUID,并重新登录
+         * 404  用户不存在，用于找回密码
+         * 402  用户存在
+         * 401  参数不匹配
+         * 401 密码错误
+         * 401  App重装或者其他设备登录，需要修改DeviceUUID,并重新登录
          * 
          * */
 
@@ -67,7 +67,7 @@ namespace TenBackend.Controllers
             TenLogin tenlogin = db.TenLogins.Where(l=>l.UserID == userID).FirstOrDefault();
             if(tenlogin == null){
                 //用户不存在
-                return BadRequest("4000");
+                return NotFound();
             }
 
             return Ok(tenlogin.UserPWD);
@@ -89,14 +89,10 @@ namespace TenBackend.Controllers
             if (tenLogin.UserPWD != userPWD)
             {
                 //密码错误
-                return BadRequest("4003");
+                return StatusCode(HttpStatusCode.Unauthorized);
             }
 
-            if (tenLogin.DeviceUUID != DeviceUUID)
-            {
-                //更换了设备或者应用重装，需要先修改DeviceUUID
-                return BadRequest("4004");
-            }
+
 
             //比较Hash sha-256
             StringBuilder sb = new StringBuilder();
@@ -109,8 +105,15 @@ namespace TenBackend.Controllers
             string mHash = HashEncrypt.SHA256Encrypt(sb.ToString());
             if (mHash != HashValue)
             {
-                return BadRequest("Wrong HashValue!  " + "hashStr:" + sb.ToString() + "  hashResult:" + mHash+"  details:"+
-                    "[" + userID + "," + userPWD + "," + lastLogin + "," + DeviceUUID + "," + DeviceToken + "," + companyCode + "]");
+                //return BadRequest("Wrong HashValue!  " + "hashStr:" + sb.ToString() + "  hashResult:" + mHash+"  details:"+
+                //    "[" + userID + "," + userPWD + "," + lastLogin + "," + DeviceUUID + "," + DeviceToken + "," + companyCode + "]");
+                return StatusCode(HttpStatusCode.Unauthorized);
+            }
+
+            if (tenLogin.DeviceUUID != DeviceUUID)
+            {
+                //更换了设备或者应用重装，需要先修改DeviceUUID
+                tenLogin.DeviceUUID = DeviceUUID;
             }
 
             try
@@ -129,6 +132,21 @@ namespace TenBackend.Controllers
             return Ok(tenLogin);
         }
 
+
+        // GET: api/TenLogins/5
+        /// <summary>
+        /// Check if the same device or its a new app
+        /// </summary>
+        [ResponseType(typeof(TenLogin))]
+        public IHttpActionResult GetTenLogin(string userID, string DeviceUUID)
+        {
+            TenLogin tenlogin = db.TenLogins.Where(l => l.UserID == userID && l.DeviceUUID == DeviceUUID).FirstOrDefault();
+            if (tenlogin == null)
+            {
+                return NotFound();
+            }
+            return Ok(tenlogin);
+        }
        
 
         // PUT api/TenLogins/5
@@ -145,7 +163,7 @@ namespace TenBackend.Controllers
 
             if (id != tenlogin.LoginIndex)
             {
-                return BadRequest("4002");//参数不匹配
+                StatusCode(HttpStatusCode.Unauthorized);//参数不匹配
             }
 
             db.Entry(tenlogin).State = EntityState.Modified;
@@ -184,7 +202,7 @@ namespace TenBackend.Controllers
             TenLogin t = db.TenLogins.Where(e => e.UserID == tenlogin.UserID).FirstOrDefault();
             if (t != null)
             {
-                return BadRequest("4001");//用户存在
+                return StatusCode(HttpStatusCode.Unauthorized);//用户存在
             }
 
             db.TenLogins.Add(tenlogin);
