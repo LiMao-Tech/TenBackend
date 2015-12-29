@@ -19,14 +19,22 @@ namespace TenBackend
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
-            //User template Scripts
-            bundles.Add(new ScriptBundle("~/bundles/sb-admin-2").Include("~/Scripts/sb-admin-2.js"));
+           
+
+            //DataTable
+            bundles.Add(new ScriptBundle("~/bundles/dataTable").Include(
+                "~/Scripts/jquery.dataTables.min.js",
+                "~/Scripts/metisMenu.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/sb-admin-2.css",
-                      "~/Content/font-awesome.min.css"));           
+                      "~/Content/site.css",                   
+                      "~/Content/font-awesome.min.css",
+                      "~/Content/jquery.dataTables.min.css",
+                      "~/Content/metisMenu.min.css",
+                       "~/Content/sb-admin-2.css"));
+            //User template Scripts
+            bundles.Add(new ScriptBundle("~/bundles/sb-admin-2").Include("~/Scripts/sb-admin-2.js"));
         }
     }
 }

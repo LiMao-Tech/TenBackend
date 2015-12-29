@@ -34,3 +34,9 @@ $(function() {
         element.addClass('active');
     }
 });
+
+$(function () {
+    $('#table_id').DataTable();
+});
+
+

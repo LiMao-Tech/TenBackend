@@ -1,0 +1,90 @@
+﻿@model TenBackend.Models.TenLogin
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>TenLogin</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserIndex, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserIndex)
+                @Html.ValidationMessageFor(model => model.UserIndex)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserID, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserID)
+                @Html.ValidationMessageFor(model => model.UserID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserPWD, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserPWD)
+                @Html.ValidationMessageFor(model => model.UserPWD)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastLogin, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastLogin)
+                @Html.ValidationMessageFor(model => model.LastLogin)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeviceUUID, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DeviceUUID)
+                @Html.ValidationMessageFor(model => model.DeviceUUID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeviceToken, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DeviceToken)
+                @Html.ValidationMessageFor(model => model.DeviceToken)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HashValue, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HashValue)
+                @Html.ValidationMessageFor(model => model.HashValue)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

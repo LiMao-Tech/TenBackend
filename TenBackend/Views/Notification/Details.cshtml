@@ -1,0 +1,75 @@
+﻿@model TenBackend.Models.TenMsg
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TenMsg</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Sender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receiver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receiver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsLocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsLocked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsgType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsgType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsgTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsgTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsgContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsgContent)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MsgIndex }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

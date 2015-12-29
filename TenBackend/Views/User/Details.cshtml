@@ -1,0 +1,180 @@
+﻿@model TenBackend.Models.UserDetails
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Details</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <dl class="dl-horizontal">
+            <dt>
+                Profile
+            </dt>
+
+            <dd>
+                <img src="~/TenImage?id=@Model.ProfileID" height="150" width="150" />
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenLogin.UserID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenLogin.UserID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenLogin.UserPWD)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenLogin.UserPWD)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenLogin.LastLogin)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenLogin.LastLogin)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenLogin.DeviceUUID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenLogin.DeviceUUID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenLogin.DeviceToken)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenLogin.DeviceToken)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.UserName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.UserName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Gender)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Gender)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.PhoneType)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.PhoneType)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Marriage)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Marriage)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Birthday)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Birthday)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.JoinedDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.JoinedDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.PCoin)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.PCoin)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.OuterScore)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.OuterScore)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.InnerScore)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.InnerScore)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Energy)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Energy)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Hobby)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Hobby)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Quote)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Quote)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Lati)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Lati)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.TenUser.Longi)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenUser.Longi)
+            </dd>
+            <dt>
+                Photos
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PhotoCount)
+                @Html.ActionLink("View all?", "ShowPhotos", new { id = Model.TenLogin.UserIndex })
+            </dd>
+        </dl>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.TenLogin.LoginIndex }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
+</div>
+
+
+

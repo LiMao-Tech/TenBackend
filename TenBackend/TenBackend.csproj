@@ -211,6 +211,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PCoinTransController.cs" />
     <Compile Include="Controllers\TenImageController.cs" />
     <Compile Include="Controllers\TenLoginsController.cs" />
@@ -237,6 +238,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\metisMenu.min.css" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -272,8 +275,11 @@
     <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\TenBackConfig.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\metisMenu.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -301,6 +307,11 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\ShowPhotos.cshtml" />
+    <Content Include="Views\Notification\Create.cshtml" />
+    <Content Include="Views\Notification\Delete.cshtml" />
+    <Content Include="Views\Notification\Details.cshtml" />
+    <Content Include="Views\Notification\Edit.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

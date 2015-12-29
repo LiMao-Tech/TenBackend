@@ -1,0 +1,86 @@
+﻿@model TenBackend.Models.TenMsg
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>TenMsg</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.MsgIndex)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sender, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sender)
+                @Html.ValidationMessageFor(model => model.Sender)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Receiver, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Receiver)
+                @Html.ValidationMessageFor(model => model.Receiver)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhoneType, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PhoneType)
+                @Html.ValidationMessageFor(model => model.PhoneType)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsLocked, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IsLocked)
+                @Html.ValidationMessageFor(model => model.IsLocked)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MsgType, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MsgType)
+                @Html.ValidationMessageFor(model => model.MsgType)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MsgTime, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MsgTime)
+                @Html.ValidationMessageFor(model => model.MsgTime)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MsgContent, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MsgContent)
+                @Html.ValidationMessageFor(model => model.MsgContent)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

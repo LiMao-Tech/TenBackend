@@ -1,0 +1,81 @@
+﻿@model TenBackend.Models.TenMsg
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TenMsg</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Sender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Receiver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receiver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsLocked)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsLocked)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsgType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsgType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsgTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsgTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MsgContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MsgContent)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

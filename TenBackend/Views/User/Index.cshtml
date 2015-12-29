@@ -1,0 +1,92 @@
+﻿@model IEnumerable<TenBackend.Models.TenLogin>
+
+@{
+    ViewBag.Title = "UserInfo";
+    Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Users</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                User Table
+            </div>
+            <div class="panel-body">
+                <table id="table_id">
+                    <thead>
+                        <tr role="row">
+                            <th>
+                                @Html.DisplayNameFor(model => model.LoginIndex)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UserIndex)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UserID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UserPWD)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LastLogin)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DeviceUUID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DeviceToken)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoginIndex)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserIndex)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserPWD)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastLogin)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeviceUUID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeviceToken)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.LoginIndex }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.LoginIndex }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.LoginIndex })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+ 
+
+

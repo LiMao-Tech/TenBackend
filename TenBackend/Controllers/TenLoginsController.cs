@@ -23,7 +23,7 @@ namespace TenBackend.Controllers
         /**
          * 错误代码表:
          * 404  用户不存在，用于找回密码
-         * 402  用户存在
+         * 401  用户存在
          * 401  参数不匹配
          * 401 密码错误
          * 401  App重装或者其他设备登录，需要修改DeviceUUID,并重新登录
@@ -129,7 +129,14 @@ namespace TenBackend.Controllers
             db.Entry(tenLogin).State = EntityState.Modified;
             db.SaveChanges();
 
-            return Ok(tenLogin);
+            TenUser tenuser = db.TenUsers.Find(tenLogin.UserIndex);
+
+            if (tenuser == null) 
+            {
+                return NotFound();
+            }
+
+            return Ok(tenuser);
         }
 
 
