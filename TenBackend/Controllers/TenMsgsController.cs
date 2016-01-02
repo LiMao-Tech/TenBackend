@@ -150,7 +150,7 @@ namespace TenBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            tenmsg.MsgTime = DateTime.Now;
+           
 
             db.TenMsgs.Add(tenmsg);
             db.SaveChanges();
