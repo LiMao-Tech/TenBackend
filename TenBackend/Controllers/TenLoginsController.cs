@@ -191,7 +191,9 @@ namespace TenBackend.Controllers
                 }
             }
 
-            return Ok(tenlogin);
+            TenUser tenuser = db.TenUsers.Find(tenlogin.UserIndex);
+
+            return Ok(tenuser);
         }
 
         // POST api/TenLogins

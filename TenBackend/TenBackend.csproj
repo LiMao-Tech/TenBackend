@@ -211,6 +211,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImageUnlockerController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PCoinTransController.cs" />
     <Compile Include="Controllers\TenImageController.cs" />
@@ -224,6 +225,7 @@
     </Compile>
     <Compile Include="Models\HashEncrypt.cs" />
     <Compile Include="Models\ImageType.cs" />
+    <Compile Include="Models\ImageUnlocker.cs" />
     <Compile Include="Models\PCoinTrans.cs" />
     <Compile Include="Models\PDL\TenBackendDbContext.cs" />
     <Compile Include="Models\TenImage.cs" />

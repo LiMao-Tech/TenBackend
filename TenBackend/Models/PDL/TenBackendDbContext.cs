@@ -29,6 +29,8 @@ namespace TenBackend.Models.PDL
         public System.Data.Entity.DbSet<TenBackend.Models.TenMsg> TenMsgs { get; set; }
 
         public System.Data.Entity.DbSet<TenBackend.Models.PCoinTrans> PCoinTrans { get; set; }
+
+        public System.Data.Entity.DbSet<TenBackend.Models.ImageUnlocker> ImageUnlockers { get; set; }
     
     }
 }
