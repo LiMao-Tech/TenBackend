@@ -22,8 +22,7 @@ namespace TenBackend.Controllers
     public class TenMsgsController : ApiController
     {
         static string PUSH_CERTI_LOC = "./Resources/TenPushNotiDev.p12";
-        static string PUSH_CERTI_PWD = "limao1234";
-
+        static string PUSH_CERTI_PWD = "LiMao1234";
 
         private PushBroker m_pushBroker = new PushBroker();
         private Byte[] m_appleCerti = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PUSH_CERTI_LOC));
@@ -32,19 +31,17 @@ namespace TenBackend.Controllers
 
         public TenMsgsController()
         {
-            //Wire up the events for all the services that the broker registers
-            //m_pushBroker.OnNotificationSent += NotificationSent;
-            //m_pushBroker.OnChannelException += ChannelException;
-            //m_pushBroker.OnServiceException += ServiceException;
-            //m_pushBroker.OnNotificationFailed += NotificationFailed;
-            //m_pushBroker.OnDeviceSubscriptionExpired += DeviceSubscriptionExpired;
-            //m_pushBroker.OnDeviceSubscriptionChanged += DeviceSubscriptionChanged;
-            //m_pushBroker.OnChannelCreated += ChannelCreated;
-            //m_pushBroker.OnChannelDestroyed += ChannelDestroyed;
+            // Wire up the events for all the services that the broker registers
+            m_pushBroker.OnNotificationSent += NotificationSent;
+            m_pushBroker.OnChannelException += ChannelException;
+            m_pushBroker.OnServiceException += ServiceException;
+            m_pushBroker.OnNotificationFailed += NotificationFailed;
+            m_pushBroker.OnDeviceSubscriptionExpired += DeviceSubscriptionExpired;
+            m_pushBroker.OnDeviceSubscriptionChanged += DeviceSubscriptionChanged;
+            m_pushBroker.OnChannelCreated += ChannelCreated;
+            m_pushBroker.OnChannelDestroyed += ChannelDestroyed;
 
-            //m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(true,m_appleCerti, PUSH_CERTI_PWD));
-
-            //// push.StopAllServices();
+            m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(m_appleCerti, "LiMao1234"));
         }
 
         // GET api/TenMsgs
@@ -74,7 +71,6 @@ namespace TenBackend.Controllers
         [ResponseType(typeof(List<TenMsg>))]
         public List<TenMsg> GetTenMsg(int id, int receiver, int sender)
         {
-
             List<TenMsg> list = db.TenMsgs.Where(m => m.MsgIndex > id && m.Receiver == receiver && m.Sender == sender).ToList();
             List<TenMsg> list1 = db.TenMsgs.Where(m => m.MsgIndex > id && m.Receiver == sender && m.Sender == receiver).ToList();
             list.AddRange(list1);
@@ -161,23 +157,14 @@ namespace TenBackend.Controllers
 
             if (tenmsg.PhoneType == 0) // iPhone
             {
-                //TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == tenmsg.Receiver).FirstOrDefault();
-                //TenUser u = db.TenUsers.Find(tenmsg.Sender);
-                //Debug.WriteLine("Target Login: " + targetLogin.LastLogin);
-                //Debug.WriteLine("Device Token: " + targetLogin.DeviceToken);
+                TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == tenmsg.Receiver).FirstOrDefault();
+                TenUser u = db.TenUsers.Find(tenmsg.Sender);
 
-                //m_pushBroker.QueueNotification(new AppleNotification()
-                //                           .ForDeviceToken(targetLogin.DeviceToken)
-                //                           .WithAlert( u.UserName+": "+tenmsg.MsgContent)
-                //                           .WithBadge(7)
-                //                           .WithSound("sound.caf"));
-                /*
                 m_pushBroker.QueueNotification(new AppleNotification()
-                                           .ForDeviceToken("d0d0a5a868b2b70f5f6900a6cbe034facf38050b4402d14b61a68ae6c27b0b92")
-                                           .WithAlert("Hi from TDS!")
-                                           .WithBadge(7)
-                                           .WithSound("sound.caf"));*/
-
+                                            .ForDeviceToken(targetLogin.DeviceToken)
+                                            .WithAlert( u.UserName+": "+tenmsg.MsgContent)
+                                            .WithBadge(7)
+                                            .WithSound("sound.caf"));
             }
             else if (tenmsg.PhoneType == 1) // Android
             {
