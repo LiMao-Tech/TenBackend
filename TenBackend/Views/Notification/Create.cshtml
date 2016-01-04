@@ -17,50 +17,10 @@
         @Html.ValidationSummary(true)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Sender, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Sender)
-                @Html.ValidationMessageFor(model => model.Sender)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Receiver, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Receiver)
-                @Html.ValidationMessageFor(model => model.Receiver)
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.PhoneType, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.PhoneType)
                 @Html.ValidationMessageFor(model => model.PhoneType)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsLocked, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.IsLocked)
-                @Html.ValidationMessageFor(model => model.IsLocked)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.MsgType, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MsgType)
-                @Html.ValidationMessageFor(model => model.MsgType)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.MsgTime, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MsgTime)
-                @Html.ValidationMessageFor(model => model.MsgTime)
             </div>
         </div>
 
