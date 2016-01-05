@@ -78,6 +78,16 @@ namespace TenBackend.Controllers
             return list;
         }
 
+
+        // 
+        [ResponseType(typeof(List<TenMsg>))]
+        public List<TenMsg> GetTenMsg(int receiver, int currIndex)
+        {
+            List<TenMsg> list = db.TenMsgs.Where(m => m.Receiver == receiver && m.MsgIndex > currIndex).ToList();
+            list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
+            return list;
+        }
+
         // GET api/TenMsgs/5
         /// <summary>
         /// Notification Test
