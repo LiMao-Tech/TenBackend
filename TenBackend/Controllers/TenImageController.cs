@@ -7,6 +7,7 @@ using TenBackend.Models.PDL;
 using TenBackend.Models;
 using System.IO;
 using System.Data.Entity;
+using System.Text;
 
 namespace TenBackend.Controllers
 {
@@ -38,7 +39,7 @@ namespace TenBackend.Controllers
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    ChangeUserProfile(id, profile.ID);
+                    ChangeUserProfile(id);
 
                     return Json("success");
 
@@ -60,7 +61,7 @@ namespace TenBackend.Controllers
                     db.SaveChanges();
 
 
-                    ChangeUserProfile(id, profile.ID);
+                    ChangeUserProfile(id);
 
                     return Json("success");
 
@@ -187,11 +188,14 @@ namespace TenBackend.Controllers
             return Json("noImage");
         }
 
-        private void ChangeUserProfile(int id, int imageId)
+        private void ChangeUserProfile(int id)
         {
-        
+
+            TenImage profile = db.TenImages.Where(m => m.UserIndex == id && m.ImageType == ImageType.Profile).FirstOrDefault();
+
             TenUser tenuser = db.TenUsers.Find(id);
-            tenuser.ProfileUrl = "http://www.limao-tech.com/Ten/TenImage?id="+imageId;
+
+            tenuser.ProfileUrl = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(profile.ID).ToString();
             db.Entry(tenuser).State = EntityState.Modified;
             db.SaveChanges();
         }
