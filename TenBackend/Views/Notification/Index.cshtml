@@ -1,31 +1,22 @@
 ﻿@model IEnumerable<TenBackend.Models.TenMsg>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Notification";
     Layout = "~/Views/Shared/_LayoutAdministrator.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Notification</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Sender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Receiver)
-        </th>
+        <td>
+            @Html.DisplayNameFor(model => model.MsgIndex)
+        </td>
         <th>
             @Html.DisplayNameFor(model => model.PhoneType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsLocked)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MsgType)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.MsgTime)
@@ -39,19 +30,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Sender)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Receiver)
+            @Html.DisplayFor(modelItem => item.MsgIndex)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PhoneType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsLocked)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MsgType)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.MsgTime)
@@ -60,8 +42,10 @@
             @Html.DisplayFor(modelItem => item.MsgContent)
         </td>
         <td>
+            <!--
             @Html.ActionLink("Edit", "Edit", new { id=item.MsgIndex }) |
             @Html.ActionLink("Details", "Details", new { id=item.MsgIndex }) |
+                -->
             @Html.ActionLink("Delete", "Delete", new { id=item.MsgIndex })
         </td>
     </tr>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PushSharp;
+using PushSharp.Apple;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -13,12 +15,19 @@ namespace TenBackend.Controllers
 {
     public class NotificationController : Controller
     {
+        static string PUSH_CERTI_LOC = "./Resources/TenPushNotiDev.p12";
+        static string PUSH_CERTI_PWD = "LiMao1234";
+
+        private PushBroker m_pushBroker = new PushBroker();
+        private Byte[] m_appleCerti = System.IO.File.ReadAllBytes(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PUSH_CERTI_LOC));
+
         private TenBackendDbContext db = new TenBackendDbContext();
 
         // GET: /Notification/
         public ActionResult Index()
         {
-            return View(db.TenMsgs.ToList());
+
+            return View(db.TenMsgs.Where(msg => msg.MsgType == 0).ToList());
         }
 
         // GET: /Notification/Details/5
@@ -47,12 +56,42 @@ namespace TenBackend.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="MsgIndex,Sender,Receiver,PhoneType,IsLocked,MsgType,MsgTime,MsgContent")] TenMsg tenmsg)
+        public ActionResult Create([Bind(Include="MsgIndex,PhoneType,MsgTime,MsgContent")] TenMsg tenmsg)
         {
             if (ModelState.IsValid)
             {
+                tenmsg.Sender = 0;
+                tenmsg.Receiver = 0;
+                tenmsg.MsgType = 0;
+                tenmsg.IsLocked = false;
+                tenmsg.MsgTime = DateTime.Now;
+
                 db.TenMsgs.Add(tenmsg);
                 db.SaveChanges();
+
+                m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(m_appleCerti, PUSH_CERTI_PWD));
+                if (tenmsg.PhoneType == 0) // iPhone
+                {
+                    foreach (TenUser u in db.TenUsers.Where(e => e.PhoneType == 0))
+                    {
+                        TenLogin tenlogin = db.TenLogins.Where(e => e.UserIndex == u.UserIndex).FirstOrDefault();
+                        m_pushBroker.QueueNotification(new AppleNotification()
+                                               .ForDeviceToken(tenlogin.DeviceToken)
+                                               .WithAlert(tenmsg.MsgContent)
+                                               .WithBadge(7)
+                                               .WithSound("sound.caf"));
+                    }
+
+                    m_pushBroker.StopAllServices();
+                   
+                }
+                else if (tenmsg.PhoneType == 1) // Android
+                {
+
+                }
+
+
+
                 return RedirectToAction("Index");
             }
 
@@ -124,5 +163,8 @@ namespace TenBackend.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+
     }
 }

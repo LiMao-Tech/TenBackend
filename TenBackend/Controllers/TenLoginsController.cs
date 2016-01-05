@@ -196,6 +196,32 @@ namespace TenBackend.Controllers
             return Ok(tenuser);
         }
 
+        public IHttpActionResult PostTenLogin(int userindex, string devicetoken)
+        {
+
+            TenLogin tenlogin = db.TenLogins.Where(u => u.UserIndex == userindex).FirstOrDefault();
+
+            if (tenlogin == null) 
+            {
+                return NotFound();
+            }
+
+            tenlogin.DeviceToken = devicetoken;
+
+            db.Entry(tenlogin).State = EntityState.Modified;
+
+            try 
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+
+            return Ok();
+        }
+
         // POST api/TenLogins
         /// <summary>
         /// Add a row of a TenLogin data
