@@ -1,12 +1,7 @@
-﻿using PushSharp;
-using PushSharp.Apple;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TenBackend.Models;
 using TenBackend.Models.PDL;
@@ -67,7 +62,7 @@ namespace TenBackend.Controllers
                     foreach (TenUser u in db.TenUsers.Where(e => e.PhoneType == 0))
                     {
                         TenLogin tenlogin = db.TenLogins.Where(e => e.UserIndex == u.UserIndex).FirstOrDefault();
-                        TenPushBroker.GetInstance().SendNotification(tenlogin.DeviceToken, tenmsg.MsgContent);
+                        TenPushBroker.GetInstance().SendNotification2Apple(tenlogin.DeviceToken, tenmsg.MsgContent);
                     }
                    
                 return RedirectToAction("Index");

@@ -59,7 +59,7 @@ namespace TenBackend.Models.PushHelpers
 
 
 
-        public void SendNotification(string deviceToken, string content)
+        public void SendNotification2Apple(string deviceToken, string content)
         {
 
             //-------------------------
@@ -70,7 +70,10 @@ namespace TenBackend.Models.PushHelpers
                                              .WithAlert(content)
                                              .WithBadge(APPLE_NOTIFICATION_BAGE)
                                              .WithSound("sound.caf"));
+        }
 
+        public void SendNotification2Android()
+        {
             ////---------------------------
             //// ANDROID GCM NOTIFICATIONS
             ////---------------------------

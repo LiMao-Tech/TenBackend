@@ -223,18 +223,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Commos.cs" />
-    <Compile Include="Models\HashEncrypt.cs" />
-    <Compile Include="Models\ImageType.cs" />
-    <Compile Include="Models\ImageUnlocker.cs" />
-    <Compile Include="Models\PCoinTrans.cs" />
+    <Compile Include="Models\Commons.cs" />
+    <Compile Include="Models\Tools\HashEncrypt.cs" />
+    <Compile Include="Models\Assitants\ImageType.cs" />
+    <Compile Include="Models\Entities\ImageUnlocker.cs" />
+    <Compile Include="Models\Entities\PCoinTrans.cs" />
     <Compile Include="Models\PDL\TenBackendDbContext.cs" />
-    <Compile Include="Models\PushHelpers\TenPushBroker.cs" />
-    <Compile Include="Models\TenImage.cs" />
-    <Compile Include="Models\TenLogin.cs" />
-    <Compile Include="Models\TenMsg.cs" />
-    <Compile Include="Models\TenUser.cs" />
-    <Compile Include="Models\UserDetails.cs" />
+    <Compile Include="Models\Tools\TenPushBroker.cs" />
+    <Compile Include="Models\Entities\TenImage.cs" />
+    <Compile Include="Models\Entities\TenLogin.cs" />
+    <Compile Include="Models\Entities\TenMsg.cs" />
+    <Compile Include="Models\Entities\TenUser.cs" />
+    <Compile Include="Models\Assitants\UserDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

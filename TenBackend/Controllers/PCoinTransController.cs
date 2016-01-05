@@ -15,34 +15,14 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using TenBackend.Models;
 using TenBackend.Models.PDL;
+using TenBackend.Models.PushHelpers;
 
 namespace TenBackend.Controllers
 {
     public class PCoinTransController : ApiController
     {
 
-        static string PUSH_CERTI_LOC = "./Resources/TenDevMsgPush.p12";
-        static string PUSH_CERTI_PWD = "limao1234";
-
-        private PushBroker m_pushBroker = new PushBroker();
-        private Byte[] m_appleCerti = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PUSH_CERTI_LOC));
-
-        public PCoinTransController()
-        {
-            //Wire up the events for all the services that the broker registers
-            m_pushBroker.OnNotificationSent += NotificationSent;
-            m_pushBroker.OnChannelException += ChannelException;
-            m_pushBroker.OnServiceException += ServiceException;
-            m_pushBroker.OnNotificationFailed += NotificationFailed;
-            m_pushBroker.OnDeviceSubscriptionExpired += DeviceSubscriptionExpired;
-            m_pushBroker.OnDeviceSubscriptionChanged += DeviceSubscriptionChanged;
-            m_pushBroker.OnChannelCreated += ChannelCreated;
-            m_pushBroker.OnChannelDestroyed += ChannelDestroyed;
-
-            m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(m_appleCerti, PUSH_CERTI_PWD));
-
-            // push.StopAllServices();
-        }
+      
         private TenBackendDbContext db = new TenBackendDbContext();
 
 
@@ -154,14 +134,25 @@ namespace TenBackend.Controllers
             
 
             //发送通知
-            if (pcointrans.PhoneType == 0)
+            if (pcointrans.PhoneType == Commons.PHONE_TYPE_IPHONE)
             {
                 TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == pcointrans.Receiver).FirstOrDefault();
-                m_pushBroker.QueueNotification(new AppleNotification()
-                                          .ForDeviceToken(targetLogin.DeviceToken)
-                                          .WithAlert(new StringBuilder().Append(uSender.UserName).Append("向您转账了一笔PCoin").ToString())
-                                          .WithBadge(7)
-                                          .WithSound("sound.caf"));
+
+                TenMsg tenmsg = new TenMsg();
+                tenmsg.MsgType = Commons.MSG_TYPE_PCOIN;
+                tenmsg.Sender = 0;
+                tenmsg.Receiver = pcointrans.Receiver;
+                String content = new StringBuilder().Append(uSender.UserName).Append("赠送了您一笔P币").ToString();
+                tenmsg.MsgContent = content;
+                tenmsg.MsgTime = DateTime.Now;
+                db.TenMsgs.Add(tenmsg);
+                db.SaveChanges();
+
+                TenPushBroker.GetInstance().SendNotification2Apple(targetLogin.DeviceToken, content);
+            }
+            else if (pcointrans.PhoneType == Commons.PHONE_TYPE_ANDROID)
+            {
+
             }
 
             return CreatedAtRoute("DefaultApi", new { id = pcointrans.ID }, pcointrans);
