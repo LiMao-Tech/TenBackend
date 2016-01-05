@@ -223,11 +223,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Commos.cs" />
     <Compile Include="Models\HashEncrypt.cs" />
     <Compile Include="Models\ImageType.cs" />
     <Compile Include="Models\ImageUnlocker.cs" />
     <Compile Include="Models\PCoinTrans.cs" />
     <Compile Include="Models\PDL\TenBackendDbContext.cs" />
+    <Compile Include="Models\PushHelpers\TenPushBroker.cs" />
     <Compile Include="Models\TenImage.cs" />
     <Compile Include="Models\TenLogin.cs" />
     <Compile Include="Models\TenMsg.cs" />

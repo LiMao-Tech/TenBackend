@@ -116,6 +116,8 @@ namespace TenBackend.Controllers
                 tenLogin.DeviceUUID = DeviceUUID;
             }
 
+            tenLogin.DeviceToken = DeviceToken;
+
             try
             {
                 tenLogin.LastLogin = DateTime.Parse(lastLogin);

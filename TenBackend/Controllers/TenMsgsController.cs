@@ -50,6 +50,14 @@ namespace TenBackend.Controllers
             return db.TenMsgs;
         }
 
+        [ResponseType(typeof(List<TenMsg>))]
+        public List<TenMsg> GetTenMsgs(int receiver, int currIndex)
+        {
+            List<TenMsg> list = db.TenMsgs.Where(m => m.Receiver == receiver && m.MsgIndex > currIndex).ToList();
+            list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
+            return list;
+        }
+
         // GET api/TenMsgs/5
         /// <summary>
         /// Get the special msg data
@@ -78,29 +86,12 @@ namespace TenBackend.Controllers
             return list;
         }
 
-        // GET api/TenMsgs/5
-        /// <summary>
-        /// Notification Test
-        /// </summary>
-        /// <param name="deviceToken">Value of the Mobile DeviceToken</param>
-        public IHttpActionResult GetTenMsg(string deviceToken)
-        {
-            try
-            {
-                m_pushBroker.QueueNotification(new AppleNotification()
-                                      .ForDeviceToken(deviceToken)
-                                      .WithAlert("Hi from TDS!")
-                                      .WithBadge(7)
-                                      .WithSound("sound.caf"));
-                return Ok("Send");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-                     
-        }
 
+        public IQueryable<TenMsg> GetTenMsgs(int msgType)
+        {
+
+            return db.TenMsgs.Where(msg => msg.MsgType == 0);
+        }
 
 
         // PUT api/TenMsgs/5

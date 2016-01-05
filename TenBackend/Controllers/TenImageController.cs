@@ -38,7 +38,7 @@ namespace TenBackend.Controllers
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    ChangeUserProfile(id, Path.Combine(profile.BasePath, profile.FileName));
+                    ChangeUserProfile(id, profile.ID);
 
                     return Json("success");
 
@@ -59,8 +59,8 @@ namespace TenBackend.Controllers
                     db.TenImages.Add(newProfile);
                     db.SaveChanges();
 
-                                 
-                    ChangeUserProfile(id, Path.Combine(newProfile.BasePath, newProfile.FileName));
+
+                    ChangeUserProfile(id, profile.ID);
 
                     return Json("success");
 
@@ -187,11 +187,11 @@ namespace TenBackend.Controllers
             return Json("noImage");
         }
 
-        private void ChangeUserProfile(int id, string profileUrl)
+        private void ChangeUserProfile(int id, int imageId)
         {
         
             TenUser tenuser = db.TenUsers.Find(id);
-            tenuser.ProfileUrl = profileUrl;
+            tenuser.ProfileUrl = "http://www.limao-tech.com/Ten/TenImage?id="+imageId;
             db.Entry(tenuser).State = EntityState.Modified;
             db.SaveChanges();
         }

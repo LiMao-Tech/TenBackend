@@ -10,24 +10,19 @@ using System.Web;
 using System.Web.Mvc;
 using TenBackend.Models;
 using TenBackend.Models.PDL;
+using TenBackend.Models.PushHelpers;
 
 namespace TenBackend.Controllers
 {
     public class NotificationController : Controller
     {
-        static string PUSH_CERTI_LOC = "./Resources/TenPushNotiDev.p12";
-        static string PUSH_CERTI_PWD = "LiMao1234";
-
-        private PushBroker m_pushBroker = new PushBroker();
-        private Byte[] m_appleCerti = System.IO.File.ReadAllBytes(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PUSH_CERTI_LOC));
-
         private TenBackendDbContext db = new TenBackendDbContext();
 
         // GET: /Notification/
         public ActionResult Index()
         {
 
-            return View(db.TenMsgs.Where(msg => msg.MsgType == 0).ToList());
+            return View(db.TenMsgs.Where(msg => msg.MsgType == 0 && msg.Sender == 0).ToList());
         }
 
         // GET: /Notification/Details/5
@@ -69,29 +64,12 @@ namespace TenBackend.Controllers
                 db.TenMsgs.Add(tenmsg);
                 db.SaveChanges();
 
-                m_pushBroker.RegisterAppleService(new ApplePushChannelSettings(m_appleCerti, PUSH_CERTI_PWD));
-                if (tenmsg.PhoneType == 0) // iPhone
-                {
                     foreach (TenUser u in db.TenUsers.Where(e => e.PhoneType == 0))
                     {
                         TenLogin tenlogin = db.TenLogins.Where(e => e.UserIndex == u.UserIndex).FirstOrDefault();
-                        m_pushBroker.QueueNotification(new AppleNotification()
-                                               .ForDeviceToken(tenlogin.DeviceToken)
-                                               .WithAlert(tenmsg.MsgContent)
-                                               .WithBadge(7)
-                                               .WithSound("sound.caf"));
+                        TenPushBroker.GetInstance().SendNotification(tenlogin.DeviceToken, tenmsg.MsgContent);
                     }
-
-                    m_pushBroker.StopAllServices();
                    
-                }
-                else if (tenmsg.PhoneType == 1) // Android
-                {
-
-                }
-
-
-
                 return RedirectToAction("Index");
             }
 
