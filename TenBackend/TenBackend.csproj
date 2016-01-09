@@ -210,10 +210,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BindInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageUnlockerController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PCoinTransController.cs" />
+    <Compile Include="Controllers\RaterController.cs" />
     <Compile Include="Controllers\TenImageController.cs" />
     <Compile Include="Controllers\TenLoginsController.cs" />
     <Compile Include="Controllers\TenMsgsController.cs" />
@@ -223,12 +225,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Commons.cs" />
+    <Compile Include="Models\Assitants\Commons.cs" />
+    <Compile Include="Models\Entities\BindInfo.cs" />
+    <Compile Include="Models\Entities\Rater.cs" />
     <Compile Include="Models\Tools\HashEncrypt.cs" />
     <Compile Include="Models\Assitants\ImageType.cs" />
     <Compile Include="Models\Entities\ImageUnlocker.cs" />
     <Compile Include="Models\Entities\PCoinTrans.cs" />
     <Compile Include="Models\PDL\TenBackendDbContext.cs" />
+    <Compile Include="Models\Tools\TenEmailHelper.cs" />
     <Compile Include="Models\Tools\TenPushBroker.cs" />
     <Compile Include="Models\Entities\TenImage.cs" />
     <Compile Include="Models\Entities\TenLogin.cs" />

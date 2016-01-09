@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
+using TenBackend.Models.Assitants;
 
-namespace TenBackend.Models
+namespace TenBackend.Models.Entities
 {
     public class TenImage
     {

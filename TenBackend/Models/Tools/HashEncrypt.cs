@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
-namespace TenBackend.Models
+namespace TenBackend.Models.Tools
 {
     public class HashEncrypt
     {

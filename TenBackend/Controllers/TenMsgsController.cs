@@ -14,9 +14,10 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
-using TenBackend.Models;
+using TenBackend.Models.Entities;
+using TenBackend.Models.Assitants;
 using TenBackend.Models.PDL;
-using TenBackend.Models.PushHelpers;
+using TenBackend.Models.Tools.PushHelpers;
 
 namespace TenBackend.Controllers
 {
@@ -40,28 +41,64 @@ namespace TenBackend.Controllers
             return list;
         }
 
-        // GET api/TenMsgs/5
+        // GET api/TenMsg/5
         /// <summary>
-        /// Get the special msg data
+        /// return specific user's latest MessageIndex in server's database,-1 repreases exception
         /// </summary>
-        /// <param name="id">Value of the MsgIndex</param>
+        /// <param name="id">Value of the UserIndex</param>
         [ResponseType(typeof(TenMsg))]
-        public IHttpActionResult GetTenMsg(int id)
+        public IHttpActionResult GetTenMsg(int userIndex)
         {
-
-            TenMsg tenmsg = db.TenMsgs.Find(id);
-            if (tenmsg == null)
+            int lastIndex = -1;
+            try
             {
-                return NotFound();
+             lastIndex  =  db.TenMsgs.Where(m => m.Receiver == userIndex).Max(m => m.MsgIndex);
             }
-
-            return Ok(tenmsg);
+            catch (Exception e)
+            {
+                throw e;
+            }
+           
+            return Ok(lastIndex);
         }
 
-        public IQueryable<TenMsg> GetTenMsgs(int msgType)
+        // GET api/TenMsgs/5
+        /// <summary>
+        /// get specific users' limited numbers(decide by amount) of messages before the msgIndex
+        /// </summary>
+        public List<TenMsg> GetTenMsgs(int sender,int receiver,int msgIndx,int amount)
         {
+            List<TenMsg> msgs = db.TenMsgs.Where(m =>
+                m.Sender == sender &&
+                m.Receiver == receiver &&
+                m.MsgType == Commons.MSG_TYPE_USER &&
+                m.MsgIndex < msgIndx)
+                .OrderBy(m => m.MsgIndex).ToList();
+            List<TenMsg> list = new List<TenMsg>();
+            int baseIndex = msgs.Count-amount ;
+            for (int i = baseIndex; i < msgs.Count; i++)
+            {
+                list.Add(msgs.ElementAt(i));
+            }
+            list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
+            return list;
+        }
 
-            return db.TenMsgs.Where(msg => msg.MsgType == 0);
+
+
+        // GET api/TenMsg/5
+        /// <summary>
+        /// Get the System Notification or PcoinNotification or ImageNotifications of specail user
+        /// Tips:
+        ///     receiver==0 && msgType == 0 indicates the SystemNotification
+        ///     msgType == 0 indicates the Nomal Message
+        ///     msgType == 1 indicates the Image Message
+        ///     msgType == 2 indicates the PcoinNotification
+        /// </summary>
+        /// <param name="receiver"></param>
+        public IQueryable<TenMsg> GetTenMsg(int receiver, int msgType,int currentIndex)
+        {
+            return db.TenMsgs.Where(msg => msg.Receiver == receiver && msg.MsgType == msgType && msg.MsgIndex > currentIndex);
         }
 
 

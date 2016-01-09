@@ -8,12 +8,17 @@ using TenBackend.Models;
 using System.IO;
 using System.Data.Entity;
 using System.Text;
+using TenBackend.Models.Entities;
+using TenBackend.Models.Assitants;
+using TenBackend.Models.PDL;
+using TenBackend.Models.Tools.PushHelpers;
 
 namespace TenBackend.Controllers
 {
     public class TenImageController : Controller
     {
         static string IMAGE_PATH = "D:/TenImages";
+        static string SEND_IMAGE_STR = "给你发送了张图片";
         private TenBackendDbContext db = new TenBackendDbContext();
 
         /// <summary>
@@ -105,6 +110,69 @@ namespace TenBackend.Controllers
             }
 
             return Json("noUploads");
+        }
+
+        /// <summary>
+        /// 发送图片Message
+        /// </summary>
+        /// <param name="sender">发送人</param>
+        /// <param name="receiver">接收人</param>
+        /// <param name="time">发送时间</param>
+        /// <param name="phoneType">手机类型</param>
+        /// <param name="upload">图片文件</param>
+        public JsonResult SendImage(int sender, int receiver, DateTime time, byte phoneType,HttpPostedFileBase upload)
+        {
+             if (upload != null && upload.ContentLength > 0)
+            {
+
+                    //保存图片
+                    var image = new TenImage
+                    {
+                        FileName = sender + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName),
+                        ContentType = upload.ContentType,
+                        BasePath = Path.Combine(IMAGE_PATH),
+                        IsLocked = false,
+                        ImageType = ImageType.Message,
+                        UploadTime = time,
+                        UserIndex = sender
+                    };
+                    upload.SaveAs(Path.Combine(image.BasePath, image.FileName));
+                    db.TenImages.Add(image);
+                    db.SaveChanges();
+
+                    //添加MSG记录
+                    TenUser tenuser = db.TenUsers.Find(sender);
+                    TenImage tenimage = db.TenImages.Where(m =>
+                            m.UserIndex == sender &&
+                            m.UploadTime == time &&
+                            m.ImageType == ImageType.Message).FirstOrDefault();
+
+                    TenMsg tenmsg = new TenMsg();
+                    tenmsg.Sender = sender;
+                    tenmsg.Receiver = receiver;
+                    tenmsg.MsgTime = time;
+                    tenmsg.MsgType = Commons.MSG_TYPE_IMAGE;
+                    tenmsg.MsgContent = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(tenimage.ID).ToString();
+                    db.TenMsgs.Add(tenmsg);
+                    db.SaveChanges();
+                    
+                 
+                   //发送通知
+                   TenLogin tenlogin = db.TenLogins.Where(u=>u.UserIndex == receiver).FirstOrDefault();
+                   if(phoneType == Commons.PHONE_TYPE_IPHONE){
+
+                       string content = new StringBuilder(tenuser.UserName).Append(SEND_IMAGE_STR).ToString();
+                       TenPushBroker.GetInstance().SendNotification2Apple(tenlogin.DeviceToken, content);
+                   }
+                   else if (phoneType == Commons.PHONE_TYPE_ANDROID)
+                   {
+
+                   }
+
+                   return Json("success");
+                  
+                }
+             return Json("noUpload");
         }
 
         /// <summary>

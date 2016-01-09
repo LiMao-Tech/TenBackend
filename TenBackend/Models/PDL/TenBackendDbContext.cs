@@ -20,17 +20,22 @@ namespace TenBackend.Models.PDL
         {
         }
 
-        public System.Data.Entity.DbSet<TenBackend.Models.TenLogin> TenLogins { get; set; }
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.TenLogin> TenLogins { get; set; }
 
-        public System.Data.Entity.DbSet<TenBackend.Models.TenUser> TenUsers { get; set; }
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.TenUser> TenUsers { get; set; }
 
-        public System.Data.Entity.DbSet<TenBackend.Models.TenImage> TenImages { get; set; }
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.TenImage> TenImages { get; set; }
 
-        public System.Data.Entity.DbSet<TenBackend.Models.TenMsg> TenMsgs { get; set; }
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.TenMsg> TenMsgs { get; set; }
 
-        public System.Data.Entity.DbSet<TenBackend.Models.PCoinTrans> PCoinTrans { get; set; }
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.PCoinTrans> PCoinTrans { get; set; }
 
-        public System.Data.Entity.DbSet<TenBackend.Models.ImageUnlocker> ImageUnlockers { get; set; }
-    
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.ImageUnlocker> ImageUnlockers { get; set; }
+
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.Rater> Raters { get; set; }
+
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.BindInfo> BindInfoes { get; set; }
+
+      
     }
 }

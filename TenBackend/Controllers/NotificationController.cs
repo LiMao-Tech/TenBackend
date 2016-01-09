@@ -3,9 +3,10 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using TenBackend.Models;
+using TenBackend.Models.Entities;
+using TenBackend.Models.Assitants;
 using TenBackend.Models.PDL;
-using TenBackend.Models.PushHelpers;
+using TenBackend.Models.Tools.PushHelpers;
 
 namespace TenBackend.Controllers
 {

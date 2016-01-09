@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace TenBackend.Models
+namespace TenBackend.Models.Entities
 {
     public class TenLogin
     {

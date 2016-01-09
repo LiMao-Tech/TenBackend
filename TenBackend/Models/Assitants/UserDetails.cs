@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using TenBackend.Models.Entities;
 
-namespace TenBackend.Models
+namespace TenBackend.Models.Assitants
 {
     public class UserDetails
     {
