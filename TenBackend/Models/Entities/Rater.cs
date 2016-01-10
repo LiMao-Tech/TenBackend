@@ -10,11 +10,29 @@ namespace TenBackend.Models.Entities
     {
         [Key]
         public int ID { set; get; }
+        /// <summary>
+        /// 评价者UserIndex
+        /// </summary>
         public int RaterIndex { set; get; }
+        /// <summary>
+        /// 被评价者UserIndex
+        /// </summary>
         public int UserIndex { set; get; }
+        /// <summary>
+        /// 外在
+        /// </summary>
         public int OuterScore { set; get; }
+        /// <summary>
+        /// 内在
+        /// </summary>
         public int InnerScore { set; get; }
+        /// <summary>
+        /// 能量
+        /// </summary>
         public int Energy { set; get; }
+        /// <summary>
+        /// 对话激活状态
+        /// </summary>
         public bool Active { set; get; }
     }
 }

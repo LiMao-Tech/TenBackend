@@ -11,11 +11,26 @@ namespace TenBackend.Models.Entities
     {
         [Key]
         public int ID { set; get; }
+        /// <summary>
+        /// 图片ID
+        /// </summary>
         public int TenImageID { set; get; }
+        /// <summary>
+        /// 图片拥有者UserIndex
+        /// </summary>
         public int Owner { set; get; }
+        /// <summary>
+        /// 解锁人UserIndex
+        /// </summary>
         public int Unlocker { set; get; }
+        /// <summary>
+        /// 解锁花费的P币
+        /// </summary>
         [Column(TypeName = "money")]
         public decimal Pcoin { set; get; }
+        /// <summary>
+        /// 解锁时间
+        /// </summary>
         [Column(TypeName = "date")]
         public DateTime UnlockTime { set; get; }
     }

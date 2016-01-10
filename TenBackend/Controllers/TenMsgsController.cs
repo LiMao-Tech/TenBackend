@@ -27,27 +27,40 @@ namespace TenBackend.Controllers
         private TenBackendDbContext db = new TenBackendDbContext();
 
         // GET api/TenMsgs
+        /// <summary>
+        /// 获取所有聊天记录
+        /// </summary>
         public IQueryable<TenMsg> GetTenMsgs()
         {
             return db.TenMsgs;
         }
 
         //Get latest message
+        // GET api/TenMsgs
+        /// <summary>
+        ///获取指定receiver的MsgIndex>currIndex的聊天消息
+        /// </summary>
         [ResponseType(typeof(List<TenMsg>))]
-        public List<TenMsg> GetTenMsgs(int receiver, int currIndex)
+        public IHttpActionResult GetTenMsgs(int receiver, int currIndex)
         {
-            List<TenMsg> list = db.TenMsgs.Where(m => m.Receiver == receiver && m.MsgIndex > currIndex).ToList();
-            list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
-            return list;
+            try
+            {
+                List<TenMsg> list = db.TenMsgs.Where(m => m.Receiver == receiver && m.MsgIndex > currIndex).ToList();
+                list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
 
         // GET api/TenMsg/5
         /// <summary>
-        /// return specific user's latest MessageIndex in server's database,-1 repreases exception
+        ///  获取指定用户的最后一条聊天消息的Index
         /// </summary>
         /// <param name="id">Value of the UserIndex</param>
-        [ResponseType(typeof(TenMsg))]
-        public IHttpActionResult GetTenMsg(int userIndex)
+        public IHttpActionResult GetTenMsgs(int userIndex)
         {
             int lastIndex = -1;
             try
@@ -56,7 +69,7 @@ namespace TenBackend.Controllers
             }
             catch (Exception e)
             {
-                throw e;
+                return Ok(lastIndex);
             }
            
             return Ok(lastIndex);
@@ -66,37 +79,42 @@ namespace TenBackend.Controllers
         /// <summary>
         /// get specific users' limited numbers(decide by amount) of messages before the msgIndex
         /// </summary>
-        public List<TenMsg> GetTenMsgs(int sender,int receiver,int msgIndx,int amount)
+
+        [ResponseType(typeof(List<TenMsg>))]
+        public IHttpActionResult GetTenMsgs(int sender, int receiver, int msgIndx, int amount)
         {
-            List<TenMsg> msgs = db.TenMsgs.Where(m =>
+            try
+            {
+                List<TenMsg> msgs = db.TenMsgs.Where(m =>
                 m.Sender == sender &&
                 m.Receiver == receiver &&
                 m.MsgType == Commons.MSG_TYPE_USER &&
                 m.MsgIndex < msgIndx)
                 .OrderBy(m => m.MsgIndex).ToList();
-            List<TenMsg> list = new List<TenMsg>();
-            int baseIndex = msgs.Count-amount ;
-            for (int i = baseIndex; i < msgs.Count; i++)
-            {
-                list.Add(msgs.ElementAt(i));
+
+                List<TenMsg> list = new List<TenMsg>();
+                int baseIndex = msgs.Count - amount;
+                for (int i = baseIndex; i < msgs.Count; i++)
+                {
+                    list.Add(msgs.ElementAt(i));
+                }
+                list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
+                return Ok(list);
             }
-            list.Sort((m1, m2) => m1.MsgIndex - m2.MsgIndex);
-            return list;
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
 
 
 
         // GET api/TenMsg/5
         /// <summary>
-        /// Get the System Notification or PcoinNotification or ImageNotifications of specail user
-        /// Tips:
-        ///     receiver==0 && msgType == 0 indicates the SystemNotification
-        ///     msgType == 0 indicates the Nomal Message
-        ///     msgType == 1 indicates the Image Message
-        ///     msgType == 2 indicates the PcoinNotification
+        /// 获取指定用户,msgindex > currentIndex的系统通知(receiver=0,msgType=0)或特定用户的图片，P币通知
         /// </summary>
-        /// <param name="receiver"></param>
-        public IQueryable<TenMsg> GetTenMsg(int receiver, int msgType,int currentIndex)
+        [ResponseType(typeof(IQueryable<TenMsg>))]
+        public IQueryable<TenMsg> GetTenMsgs(int receiver, int msgType,int currentIndex)
         {
             return db.TenMsgs.Where(msg => msg.Receiver == receiver && msg.MsgType == msgType && msg.MsgIndex > currentIndex);
         }
@@ -139,7 +157,7 @@ namespace TenBackend.Controllers
 
         // POST api/TenMsgs
         /// <summary>
-        /// Add a row of Msg data
+        /// 发送聊天消息
         /// </summary>
         [ResponseType(typeof(TenMsg))]
         public IHttpActionResult PostTenMsg(TenMsg tenmsg)

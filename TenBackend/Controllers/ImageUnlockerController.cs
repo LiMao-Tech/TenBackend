@@ -39,6 +39,8 @@ namespace TenBackend.Controllers
         }
 
         // GET api/ImageUnlocker/5
+        ///<summary>获取用户owner对用户unlocker已经解锁的图片的记录</summary>
+        /// <param name="owner"></param>
         [ResponseType(typeof(IQueryable<ImageUnlocker>))]
         public IQueryable<ImageUnlocker> GetImageUnlocker(int owner,int unlocker)
         {
@@ -81,6 +83,10 @@ namespace TenBackend.Controllers
         }
 
         // POST api/ImageUnlocker
+        /// <summary>
+        /// 解锁图片
+        /// </summary>
+        /// <param name="imageunlocker">Tip:1.TenImageID为图片的ID,</param>
         [ResponseType(typeof(ImageUnlocker))]
         public IHttpActionResult PostImageUnlocker(ImageUnlocker imageunlocker)
         {

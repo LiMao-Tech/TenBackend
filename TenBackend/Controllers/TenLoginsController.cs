@@ -35,7 +35,7 @@ namespace TenBackend.Controllers
 
 
         /// <summary>
-        /// Gets all TenLogin data from the server.
+        /// 获取所有TenLogin信息
         /// </summary>
         // GET api/TenLogins
         public IQueryable<TenLogin> GetTenLogins()
@@ -45,7 +45,7 @@ namespace TenBackend.Controllers
 
         // GET api/TenLogins/5
         /// <summary>
-        /// Get the special Tenlogin data
+        /// 获取指定LoginIndex用户的TenLogin信息
         /// </summary>
         /// <param name="id">The key in the Tenlogin table</param>
         [ResponseType(typeof(TenLogin))]
@@ -62,7 +62,7 @@ namespace TenBackend.Controllers
 
         // POST: api/TenLogins/5
         /// <summary>
-        /// Get the password
+        /// Get the password（invalid）
         /// </summary>
         [ResponseType(typeof(string))]
         public IHttpActionResult PostTenLogin(string userID)
@@ -77,7 +77,7 @@ namespace TenBackend.Controllers
         }
          // GET: api/TenLogins/5
         /// <summary>
-        /// Sign in to the server
+        /// 用户登录
         /// </summary>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult GetTenLogin(string userID, string userPWD, string lastLogin, string DeviceUUID, string DeviceToken, string HashValue)
@@ -147,7 +147,7 @@ namespace TenBackend.Controllers
 
         // GET: api/TenLogins/5
         /// <summary>
-        /// Check if the same device or its a new app
+        /// 检查用户UserID的UUID是否匹配
         /// </summary>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult GetTenLogin(string userID, string DeviceUUID)
@@ -163,7 +163,7 @@ namespace TenBackend.Controllers
 
         // PUT api/TenLogins/5
         /// <summary>
-        /// Update the special Tenlogin data
+        /// 更新TenLogin信息
         /// </summary>
         /// <param name="id">The value of LoginIndex</param>
         public IHttpActionResult PutTenLogin(int id, TenLogin tenlogin)
@@ -201,6 +201,11 @@ namespace TenBackend.Controllers
             return Ok(tenuser);
         }
 
+
+        /// <summary>
+        /// 修改指定userIndex的用户的deviceToken
+        /// </summary>
+        /// <param name="id">The value of LoginIndex</param>
         public IHttpActionResult PostTenLogin(int userindex, string devicetoken)
         {
 
@@ -229,7 +234,7 @@ namespace TenBackend.Controllers
 
         // POST api/TenLogins
         /// <summary>
-        /// Add a row of a TenLogin data
+        /// Tenlogin注册
         /// </summary>
         [ResponseType(typeof(TenLogin))]
         public IHttpActionResult PostTenLogin(TenLogin tenlogin)
@@ -253,7 +258,7 @@ namespace TenBackend.Controllers
 
         // DELETE api/TenLogins/5
         /// <summary>
-        /// Delete the special TenLogin data
+        /// 删除LoginIndex指定的TenLogin信息
         /// </summary>
         /// <param name="id">The key in the Tenlogin table</param>
         [ResponseType(typeof(TenLogin))]

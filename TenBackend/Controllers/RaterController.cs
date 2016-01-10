@@ -41,6 +41,23 @@ namespace TenBackend.Controllers
             return Ok(rater);
         }
 
+        /// <summary>
+        /// 获取Rater对User的评分
+        /// </summary>
+        /// <param name="raterIndex">评分者</param>
+        /// <param name="userIndex">被评者</param>
+        [ResponseType(typeof(Rater))]
+        public IHttpActionResult GetRater(int raterIndex,int userIndex)
+        {
+            Rater rater = db.Raters.Where(r=>r.RaterIndex == raterIndex && r.UserIndex==userIndex).FirstOrDefault();
+            if (rater == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(rater);
+        }
+
         // PUT api/Rater/5
         public IHttpActionResult PutRater(int id, Rater rater)
         {
@@ -76,6 +93,9 @@ namespace TenBackend.Controllers
         }
 
         // POST api/Rater
+        /// <summary>
+        /// 对用户进行评分
+        /// </summary>
         [ResponseType(typeof(Rater))]
         public IHttpActionResult PostRater(Rater rater)
         {
@@ -84,15 +104,21 @@ namespace TenBackend.Controllers
                 return BadRequest(ModelState);
             }
 
+
             //更新被评分者分数
 
             TenUser tenuser = db.TenUsers.Find(rater.UserIndex);
-            tenuser.OuterScore = (tenuser.OuterScore + rater.OuterScore) / 2;
-            tenuser.InnerScore = (tenuser.InnerScore + rater.InnerScore) / 2;
-            tenuser.Energy = (tenuser.Energy + rater.Energy) / 2;
+
+            int outScore = (tenuser.OuterScore + rater.OuterScore) / 2;
+            tenuser.OuterScore = outScore;
+            int innerScore = (tenuser.InnerScore + rater.InnerScore) / 2;
+            tenuser.InnerScore = innerScore;
+            int energy = (tenuser.Energy + rater.Energy) / 2;
+            tenuser.Energy = energy;
+
             db.Entry(tenuser).State = EntityState.Modified;
-            
-            //添加记录
+            db.SaveChanges();
+
             db.Raters.Add(rater);
             db.SaveChanges();
 

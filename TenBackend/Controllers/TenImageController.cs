@@ -124,7 +124,7 @@ namespace TenBackend.Controllers
         {
              if (upload != null && upload.ContentLength > 0)
             {
-
+                    
                     //保存图片
                     var image = new TenImage
                     {
@@ -134,7 +134,8 @@ namespace TenBackend.Controllers
                         IsLocked = false,
                         ImageType = ImageType.Message,
                         UploadTime = time,
-                        UserIndex = sender
+                        UserIndex = sender,
+                        MsgIndex = -1
                     };
                     upload.SaveAs(Path.Combine(image.BasePath, image.FileName));
                     db.TenImages.Add(image);
@@ -144,15 +145,18 @@ namespace TenBackend.Controllers
                     TenUser tenuser = db.TenUsers.Find(sender);
                     TenImage tenimage = db.TenImages.Where(m =>
                             m.UserIndex == sender &&
-                            m.UploadTime == time &&
+                            m.MsgIndex == -1 &&
                             m.ImageType == ImageType.Message).FirstOrDefault();
 
+                   
                     TenMsg tenmsg = new TenMsg();
                     tenmsg.Sender = sender;
                     tenmsg.Receiver = receiver;
                     tenmsg.MsgTime = time;
                     tenmsg.MsgType = Commons.MSG_TYPE_IMAGE;
+                    tenmsg.PhoneType = phoneType;
                     tenmsg.MsgContent = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(tenimage.ID).ToString();
+                    tenmsg.IsLocked = false;
                     db.TenMsgs.Add(tenmsg);
                     db.SaveChanges();
                     
