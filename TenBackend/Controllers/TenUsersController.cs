@@ -92,8 +92,29 @@ namespace TenBackend.Controllers
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }       
-                // POST api/TenUsers
+        }
+
+        /// <summary>
+        /// Update new pcoin value
+        /// </summary>
+        /// <param name="id">TenUserIndex</param>
+        /// <param name="pcoin">New Pcoin value</param>
+        public IHttpActionResult PutTenUser(int id, decimal pcoin)
+        {
+            TenUser tenuser = db.TenUsers.Find(id);
+            if (tenuser == null)
+            {
+                return NotFound();
+            }
+
+            tenuser.PCoin = pcoin;
+            db.Entry(tenuser).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // POST api/TenUsers
         /// <summary>
         /// Add a row of TenUser data
         /// </summary>

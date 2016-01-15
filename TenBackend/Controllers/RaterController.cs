@@ -122,13 +122,25 @@ namespace TenBackend.Controllers
             db.Raters.Add(rater);
             db.SaveChanges();
 
+
+          
+
             //发送通知
             TenLogin tenlogin = db.TenLogins.Find(rater.UserIndex);
+              //存评分消息记录
+            TenMsg tenmsg = new TenMsg();
+            tenmsg.Sender = Commons.MSG_TYPE_SYSTEM;
+            tenmsg.Receiver = rater.UserIndex;
+            tenmsg.PhoneType = tenuser.PhoneType;
+            tenmsg.MsgTime = DateTime.Now;
+            tenmsg.MsgContent =  new StringBuilder(tenuser.UserName).Append(rateStr).ToString();
+            db.TenMsgs.Add(tenmsg);
+            db.SaveChanges();
 
             if (tenuser.PhoneType == Commons.PHONE_TYPE_IPHONE)
             {
-                String content = new StringBuilder(tenuser.UserName).Append(rateStr).ToString();
-                TenPushBroker.GetInstance().SendNotification2Apple(tenlogin.DeviceToken, content);
+               
+                TenPushBroker.GetInstance().SendNotification2Apple(tenlogin.DeviceToken, tenmsg.MsgContent);
             }
             else if (tenuser.PhoneType == Commons.PHONE_TYPE_ANDROID)
             {
