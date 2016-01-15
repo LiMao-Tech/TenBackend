@@ -60,6 +60,22 @@ namespace TenBackend.Controllers
             return Ok(tenlogin);
         }
 
+        /// <summary>
+        /// 检查Email是否被注册
+        /// </summary>
+        /// <param name="email">被检查的Email</param>
+        [ResponseType(typeof(TenLogin))]
+        public IHttpActionResult GetTenLogin(string email)
+        {
+            TenLogin tenlogin = db.TenLogins.Where(u => u.UserID == email).FirstOrDefault();
+            if (tenlogin == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(tenlogin);
+        }
+
         // POST: api/TenLogins/5
         /// <summary>
         /// Get the password（invalid）

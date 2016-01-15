@@ -173,11 +173,22 @@ namespace TenBackend.Controllers
             if (tenmsg.PhoneType == Commons.PHONE_TYPE_IPHONE) // iPhone
             {
                 TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == tenmsg.Receiver).FirstOrDefault();
-                TenUser u = db.TenUsers.Find(tenmsg.Sender);
-                TenPushBroker.GetInstance().
-                    SendNotification2Apple(
-                    targetLogin.DeviceToken, 
-                    new StringBuilder(u.UserName).Append(":").Append(tenmsg.MsgContent).ToString());
+                if (tenmsg.Sender == 0)
+                {
+                    TenPushBroker.GetInstance().
+                       SendNotification2Apple(
+                       targetLogin.DeviceToken,
+                       new StringBuilder().Append(tenmsg.MsgContent).ToString());
+                }
+                else
+                {
+                    TenUser u = db.TenUsers.Find(tenmsg.Sender);
+                    TenPushBroker.GetInstance().
+                        SendNotification2Apple(
+                        targetLogin.DeviceToken,
+                        new StringBuilder(u.UserName).Append(":").Append(tenmsg.MsgContent).ToString());
+                }
+              
             }
             else if (tenmsg.PhoneType == Commons.PHONE_TYPE_ANDROID) // Android
             {

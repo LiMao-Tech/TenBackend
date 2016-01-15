@@ -56,7 +56,7 @@
       <FileName>Models\Entities\Rater.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TenBackend.Controllers.RaterController">
+  <Class Name="TenBackend.Controllers.RaterController" Collapsed="true">
     <Position X="4.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAACAQEEAAAAAABEAgAAAAAAAAAAAAAAAAAAA=</HashCode>
