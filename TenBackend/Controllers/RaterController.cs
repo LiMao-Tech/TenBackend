@@ -138,8 +138,7 @@ namespace TenBackend.Controllers
             db.SaveChanges();
 
             if (tenuser.PhoneType == Commons.PHONE_TYPE_IPHONE)
-            {
-               
+            {             
                 TenPushBroker.GetInstance().SendNotification2Apple(tenlogin.DeviceToken, tenmsg.MsgContent);
             }
             else if (tenuser.PhoneType == Commons.PHONE_TYPE_ANDROID)

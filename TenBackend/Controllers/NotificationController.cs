@@ -18,7 +18,7 @@ namespace TenBackend.Controllers
         public ActionResult Index()
         {
 
-            return View(db.TenMsgs.Where(msg => msg.MsgType == 0 && msg.Sender == 0).ToList());
+            return View(db.TenMsgs.Where(msg => msg.MsgType == 0 && msg.Sender == 0 && msg.Receiver == 0).ToList());
         }
 
         // GET: /Notification/Details/5

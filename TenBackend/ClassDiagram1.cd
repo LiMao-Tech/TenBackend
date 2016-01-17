@@ -84,5 +84,12 @@
       <FileName>Models\Entities\TenLogin.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="TenBackend.Controllers.BindInfoController" Collapsed="true">
+    <Position X="4.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAgACAQAAAAEAAAAAAAQAAAAAAAAAAIAgAAIAA=</HashCode>
+      <FileName>Controllers\BindInfoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="Microsoft YaHei UI" Size="9" />
 </ClassDiagram>

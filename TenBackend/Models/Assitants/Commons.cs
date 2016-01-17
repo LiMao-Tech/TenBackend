@@ -16,6 +16,6 @@ namespace TenBackend.Models.Assitants
         public static byte MSG_TYPE_IMAGE = 1;
         public static byte MSG_TYPE_PCOIN = 2;
 
-        public static string TEN_HOME = "http://www.limao-teach.com/Ten/";
+        public static string TEN_HOME = "http://www.limao-tech.com/Ten/";
     }
 }

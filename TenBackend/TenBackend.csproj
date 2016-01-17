@@ -221,6 +221,7 @@
     <Compile Include="Controllers\TenMsgsController.cs" />
     <Compile Include="Controllers\TenUsersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\ValidateController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -321,6 +322,7 @@
     <Content Include="Views\Notification\Details.cshtml" />
     <Content Include="Views\Notification\Edit.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\Validate\Email.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

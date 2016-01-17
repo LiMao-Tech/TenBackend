@@ -20,12 +20,12 @@ namespace TenBackend.Models.Tools
         
         static string GMAIL_SMTP_ADDR = "smtp.gmail.com";
         static int GMAIL_SMTP_PORT = 587;
-        static string EMAIL_ACCOUT= "mingshuai001@gmail.com";
-        static string EMAIL_PASSWORD = "shyboy123";
-        static string EMAIL_TITLE = "Ten账户激活";
-        static string EMAIL_BODY = "欢迎您使用Ten,请点击此链接以绑定您的账户：";
-        static string VALIDATE_API = "api/BindInfo?validate=";
-        
+        static string EMAIL_ACCOUT= "limao.tech.cn@gmail.com";
+        static string EMAIL_PASSWORD = "limao1234@";
+        static string EMAIL_TITLE = "Ten邮箱绑定";
+        static string EMAIL_BODY = "欢迎您使用Ten,请点击此链接以绑定您的邮箱(24小时内有效，若提示链接错误请复制下面链接到浏览器地址栏进行验证)：";
+        static string VALIDATE_API_EMAIL = "Validate/Email?email=";
+        static string VALIDATE_API_VALIDATE = "&validate=";
 
         private SmtpClient client = new SmtpClient(GMAIL_SMTP_ADDR, GMAIL_SMTP_PORT);
         private TenEmailHelper() {
@@ -54,7 +54,9 @@ namespace TenBackend.Models.Tools
         {   
             string content = new StringBuilder(EMAIL_BODY)
                 .Append(Commons.TEN_HOME)
-                .Append(VALIDATE_API)
+                .Append(VALIDATE_API_EMAIL)
+                .Append(recEmail)
+                .Append(VALIDATE_API_VALIDATE)
                 .Append(validateStr)
                 .ToString();
 
