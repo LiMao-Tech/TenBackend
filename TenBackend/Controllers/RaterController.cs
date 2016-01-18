@@ -18,7 +18,11 @@ namespace TenBackend.Controllers
 {
     public class RaterController : ApiController
     {
-        static String rateStr = "对你进行了评价，赶快看看吧。。。";
+        static string userStr = "用户";
+        static string outStr = "的外在已经从";
+        static string innerStr = "的内在在已经从";
+        static string energyStr = "的能量已经从";
+        static string changeStr = "变为";
 
         private TenBackendDbContext db = new TenBackendDbContext();
 
@@ -92,6 +96,8 @@ namespace TenBackend.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+
+
         // POST api/Rater
         /// <summary>
         /// 对用户进行评分
@@ -106,15 +112,34 @@ namespace TenBackend.Controllers
 
 
             //更新被评分者分数
-
+            
             TenUser tenuser = db.TenUsers.Find(rater.UserIndex);
+            StringBuilder msgcontent = new StringBuilder(userStr);
+            msgcontent.Append(tenuser.UserName);
+            if(rater.OuterScore > -1){
+                msgcontent.Append(outStr).Append(tenuser.OuterScore);
+                int outScore = (tenuser.OuterScore + rater.OuterScore) / 2;
+                msgcontent.Append(changeStr).Append(outScore);
+                tenuser.OuterScore = outScore;
+            }
 
-            int outScore = (tenuser.OuterScore + rater.OuterScore) / 2;
-            tenuser.OuterScore = outScore;
-            int innerScore = (tenuser.InnerScore + rater.InnerScore) / 2;
-            tenuser.InnerScore = innerScore;
-            int energy = (tenuser.Energy + rater.Energy) / 2;
-            tenuser.Energy = energy;
+            if (rater.InnerScore > -1)
+            {
+                msgcontent.Append(innerStr).Append(tenuser.InnerScore);
+                int innerScore = (tenuser.InnerScore + rater.InnerScore) / 2;
+                msgcontent.Append(changeStr).Append(innerScore);
+                tenuser.InnerScore = innerScore;
+            }
+
+            if (rater.Energy > -1)
+            {
+                msgcontent.Append(energyStr).Append(tenuser.Energy);
+                int energy = (tenuser.Energy + rater.Energy) / 2;
+                msgcontent.Append(changeStr).Append(energy);
+                tenuser.Energy = energy;
+            }
+           
+           
 
             db.Entry(tenuser).State = EntityState.Modified;
             db.SaveChanges();
@@ -133,7 +158,7 @@ namespace TenBackend.Controllers
             tenmsg.Receiver = rater.UserIndex;
             tenmsg.PhoneType = tenuser.PhoneType;
             tenmsg.MsgTime = DateTime.Now;
-            tenmsg.MsgContent =  new StringBuilder(tenuser.UserName).Append(rateStr).ToString();
+            tenmsg.MsgContent =  msgcontent.ToString();
             db.TenMsgs.Add(tenmsg);
             db.SaveChanges();
 

@@ -19,15 +19,15 @@ namespace TenBackend.Models.Entities
         /// </summary>
         public int UserIndex { set; get; }
         /// <summary>
-        /// 外在
+        /// 外在,等于-1时表示不进行修改
         /// </summary>
         public int OuterScore { set; get; }
         /// <summary>
-        /// 内在
+        /// 内在,等于-1时表示不进行修改
         /// </summary>
         public int InnerScore { set; get; }
         /// <summary>
-        /// 能量
+        /// 能量,等于-1时表示不进行修改
         /// </summary>
         public int Energy { set; get; }
         /// <summary>
