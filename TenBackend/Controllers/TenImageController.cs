@@ -78,6 +78,19 @@ namespace TenBackend.Controllers
         }
 
         /// <summary>
+        /// 获取用户头像
+        /// </summary>
+        /// <param name="userIndex">用户UserIndex</param>
+        public ActionResult GetProfileByUser(int userIndex)
+        {
+
+            var imageToRetrieve = db.TenImages.Where(img => img.UserIndex == userIndex && img.ImageType == ImageType.Profile).FirstOrDefault();
+            FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return File(fileStream, imageToRetrieve.ContentType);
+        }
+
+
+        /// <summary>
         /// 上传相片
         /// </summary>
         /// <param name="id">用户ID</param>

@@ -17,7 +17,7 @@
   <Class Name="TenBackend.Controllers.TenImageController" Collapsed="true">
     <Position X="2.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAABCASAAgAAAAAAAAAAAAEAAACAAECgAAAgAA=</HashCode>
+      <HashCode>QAAAAAAABCASAAgAAAAAAAAAAAAEAAACAAECgAAAgAE=</HashCode>
       <FileName>Controllers\TenImageController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -59,7 +59,7 @@
   <Class Name="TenBackend.Controllers.RaterController" Collapsed="true">
     <Position X="4.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAQEEAAAAAABEAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAiIQEkAAAAAABEAAEAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Controllers\RaterController.cs</FileName>
     </TypeIdentifier>
   </Class>
