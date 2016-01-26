@@ -12,14 +12,36 @@ using TenBackend.Models.Entities;
 using TenBackend.Models.Assitants;
 using TenBackend.Models.PDL;
 using TenBackend.Models.Tools.PushHelpers;
+using TenBackend.Models.Tools;
+
 
 namespace TenBackend.Controllers
 {
     public class TenImageController : Controller
     {
-        static string IMAGE_PATH = "D:/TenImages";
+        static string IMAGE_PATH = "D:\\TenImages";
+        static string ORIGINAL = "\\Original";
+        static string THUMBNAIL = "\\Thumbnail";
         static string SEND_IMAGE_STR = "给你发送了张图片";
         private TenBackendDbContext db = new TenBackendDbContext();
+
+        public TenImageController()
+        {
+            checkeDir();
+        }
+
+        private void checkeDir(){
+            String originalPath = Path.Combine(IMAGE_PATH, ORIGINAL);
+            String thumbnailPath = Path.Combine(IMAGE_PATH,THUMBNAIL);
+            if (!Directory.Exists(originalPath))
+            {
+                Directory.CreateDirectory(originalPath);
+            }
+            if (!Directory.Exists(thumbnailPath))
+            {
+                Directory.CreateDirectory(thumbnailPath);
+            }
+        }
 
         /// <summary>
         /// 上传头像
@@ -35,12 +57,16 @@ namespace TenBackend.Controllers
 
                 if (profile != null)
                 {
-                    profile.FileName = id + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetFileName(upload.FileName);
                     profile.ContentType = upload.ContentType;
                     profile.UploadTime = DateTime.Now;
-                    upload.SaveAs(Path.Combine(profile.BasePath, profile.FileName));
 
+                    //覆盖
+                    String src = Path.Combine(profile.BasePath, ORIGINAL, profile.FileName);
+                    String des = Path.Combine(profile.BasePath, THUMBNAIL, profile.FileName);
+                    upload.SaveAs(src);
 
+                    TenImageUtils.resise2Thumbnail(src, des);
+                  
                     db.Entry(profile).State = EntityState.Modified;
                     db.SaveChanges();
 
@@ -61,7 +87,11 @@ namespace TenBackend.Controllers
                         UploadTime = DateTime.Now,
                         UserIndex = id
                     };
-                    upload.SaveAs(Path.Combine(newProfile.BasePath, newProfile.FileName));
+                    String src =  Path.Combine(newProfile.BasePath,ORIGINAL, newProfile.FileName);
+                    String des = Path.Combine(newProfile.BasePath,THUMBNAIL,newProfile.FileName);
+                    upload.SaveAs(src);
+                    //转存缩略图
+                    TenImageUtils.resise2Thumbnail(src, des);
                     db.TenImages.Add(newProfile);
                     db.SaveChanges();
 
@@ -81,12 +111,21 @@ namespace TenBackend.Controllers
         /// 获取用户头像
         /// </summary>
         /// <param name="userIndex">用户UserIndex</param>
-        public ActionResult GetProfileByUser(int userIndex)
+        public ActionResult GetProfileByUser(int userIndex,bool thumbnail = true)
         {
 
             var imageToRetrieve = db.TenImages.Where(img => img.UserIndex == userIndex && img.ImageType == ImageType.Profile).FirstOrDefault();
-            FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return File(fileStream, imageToRetrieve.ContentType);
+            if (thumbnail)
+            {
+                FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath,THUMBNAIL, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return File(fileStream, imageToRetrieve.ContentType);
+            }
+            else
+            {
+                FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath,ORIGINAL, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return File(fileStream, imageToRetrieve.ContentType);
+            }
+           
         }
 
 
@@ -113,7 +152,12 @@ namespace TenBackend.Controllers
                         UserIndex = id
                     };
 
-                    upload.SaveAs(Path.Combine(photo.BasePath, photo.FileName));
+                    String src = Path.Combine(photo.BasePath, ORIGINAL, photo.FileName);
+                    String des = Path.Combine(photo.BasePath, THUMBNAIL, photo.FileName);
+                    upload.SaveAs(src);
+                    //转存缩略图
+                    TenImageUtils.resise2Thumbnail(src, des);
+
                     db.TenImages.Add(photo);
                     db.SaveChanges();
                 }
@@ -150,7 +194,14 @@ namespace TenBackend.Controllers
                         UserIndex = sender,
                         MsgIndex = -1
                     };
-                    upload.SaveAs(Path.Combine(image.BasePath, image.FileName));
+
+                    String src = Path.Combine(image.BasePath, ORIGINAL, image.FileName);
+                    String des = Path.Combine(image.BasePath, THUMBNAIL, image.FileName);
+                    upload.SaveAs(src);
+                    //转存缩略图
+                    TenImageUtils.resise2Thumbnail(src, des);
+                 
+
                     db.TenImages.Add(image);
                     db.SaveChanges();
 
@@ -168,7 +219,7 @@ namespace TenBackend.Controllers
                     tenmsg.MsgTime = time;
                     tenmsg.MsgType = Commons.MSG_TYPE_IMAGE;
                     tenmsg.PhoneType = phoneType;
-                    tenmsg.MsgContent = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(tenimage.ID).ToString();
+                    tenmsg.MsgContent = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(tenimage.ID).Append("&thumbnail=true").ToString();
                     tenmsg.IsLocked = false;
                     db.TenMsgs.Add(tenmsg);
                     db.SaveChanges();
@@ -206,10 +257,15 @@ namespace TenBackend.Controllers
                 {
                     return Json("404 no such image");
                 }
-                string path = Path.Combine(image.BasePath, image.FileName);
-                if (System.IO.File.Exists(path))
+                string src = Path.Combine(image.BasePath,ORIGINAL, image.FileName);
+                string thumb = Path.Combine(image.BasePath, THUMBNAIL, image.FileName);
+                if (System.IO.File.Exists(src))
                 {
-                    System.IO.File.Delete(path);
+                    System.IO.File.Delete(src);
+                }
+                if (System.IO.File.Exists(thumb))
+                {
+                    System.IO.File.Delete(thumb);
                 }
                 db.TenImages.Remove(image);
                 db.SaveChanges();
@@ -238,11 +294,22 @@ namespace TenBackend.Controllers
         /// 获取图片
         /// </summary>
         /// <param name="id">图片ID</param>
-        public ActionResult Index(int id)
+        public ActionResult Index(int id,bool thumbnail = true)
         {
             var imageToRetrieve = db.TenImages.Find(id);
-            FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return File(fileStream, imageToRetrieve.ContentType);
+           ;
+            if (thumbnail)
+            {
+                  FileStream fileStream  = new FileStream(Path.Combine(imageToRetrieve.BasePath,THUMBNAIL,imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                  return File(fileStream, imageToRetrieve.ContentType);
+            }
+            else
+            {
+                FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath, ORIGINAL, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return File(fileStream, imageToRetrieve.ContentType);
+            }
+        
+          
         }
 
         /// <summary>
@@ -280,7 +347,7 @@ namespace TenBackend.Controllers
 
             TenUser tenuser = db.TenUsers.Find(id);
 
-            tenuser.ProfileUrl = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(profile.ID).ToString();
+            tenuser.ProfileUrl = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(profile.ID).Append("&tumbnail=true").ToString();
             db.Entry(tenuser).State = EntityState.Modified;
             db.SaveChanges();
         }

@@ -141,14 +141,13 @@ namespace TenBackend.Controllers
 
                 TenMsg tenmsg = new TenMsg();
                 tenmsg.MsgType = Commons.MSG_TYPE_PCOIN;
-                tenmsg.Sender = 0;
+                tenmsg.Sender = pcointrans.Sender;
                 tenmsg.Receiver = pcointrans.Receiver;
-                String content = new StringBuilder().Append(uSender.UserName).Append("赠送了您一笔P币").ToString();
-                tenmsg.MsgContent = content;
+                tenmsg.MsgContent = pcointrans.Amount.ToString();
                 tenmsg.MsgTime = DateTime.Now;
                 db.TenMsgs.Add(tenmsg);
                 db.SaveChanges();
-
+                String content = new StringBuilder().Append(uSender.UserName).Append("赠送了您").Append(pcointrans.Amount).Append("P币").ToString();
                 TenPushBroker.GetInstance().SendNotification2Apple(targetLogin.DeviceToken, content);
             }
             else if (pcointrans.PhoneType == Commons.PHONE_TYPE_ANDROID)
@@ -190,53 +189,7 @@ namespace TenBackend.Controllers
         }
 
 
-        static void DeviceSubscriptionChanged(object sender, string oldSubscriptionId, string newSubscriptionId, INotification notification)
-        {
-            //Currently this event will only ever happen for Android GCM
-            Console.WriteLine("Device Registration Changed:  Old-> " + oldSubscriptionId + "  New-> " + newSubscriptionId + " -> " + notification);
-        }
 
-        static void NotificationSent(object sender, INotification notification)
-        {
-            Console.WriteLine("Sent: " + sender + " -> " + notification);
-        }
-
-        static void NotificationFailed(object sender, INotification notification, Exception notificationFailureException)
-        {
-            Console.WriteLine("Failure: " + sender + " -> " + notificationFailureException.Message + " -> " + notification);
-        }
-
-        static void ChannelException(object sender, IPushChannel channel, Exception exception)
-        {
-            Console.WriteLine("Channel Exception: " + sender + " -> " + exception);
-        }
-
-        static void ServiceException(object sender, Exception exception)
-        {
-            Console.WriteLine("Service Exception: " + sender + " -> " + exception);
-        }
-
-        static void DeviceSubscriptionExpired(object sender, string expiredDeviceSubscriptionId, DateTime timestamp, INotification notification)
-        {
-            Console.WriteLine("Device Subscription Expired: " + sender + " -> " + expiredDeviceSubscriptionId);
-        }
-
-        static void ChannelDestroyed(object sender)
-        {
-            Console.WriteLine("Channel Destroyed for: " + sender);
-        }
-
-        static void ChannelCreated(object sender, IPushChannel pushChannel)
-        {
-            Console.WriteLine("Channel Created for: " + sender);
-        }
-
-        static string ByteArrayToString(byte[] ba)
-        {
-            StringBuilder hex = new StringBuilder(ba.Length * 2);
-            foreach (byte b in ba)
-                hex.AppendFormat("{0:x2}", b);
-            return hex.ToString();
-        }
+     
     }
 }

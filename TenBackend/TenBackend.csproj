@@ -226,6 +226,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Assitants\Commons.cs" />
     <Compile Include="Models\Entities\BindInfo.cs" />
     <Compile Include="Models\Entities\Rater.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Models\Entities\PCoinTrans.cs" />
     <Compile Include="Models\PDL\TenBackendDbContext.cs" />
     <Compile Include="Models\Tools\TenEmailHelper.cs" />
+    <Compile Include="Models\Tools\TenImageUtils.cs" />
     <Compile Include="Models\Tools\TenPushBroker.cs" />
     <Compile Include="Models\Entities\TenImage.cs" />
     <Compile Include="Models\Entities\TenLogin.cs" />

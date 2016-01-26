@@ -43,8 +43,18 @@ namespace TenBackend.Models.Entities
         /// <summary>
         /// 注册时间
         /// </summary>
-        [Column(TypeName = "date")]
-        public DateTime JoinedDate { get; set; }
+        
+        public long JoinedDate { get; set; }
+
+        /// <summary>
+        /// 到期时间
+        /// </summary>
+        public long Expire { get; set; }
+
+        /// <summary>
+        /// 购买到的等级
+        /// </summary>
+        public int AVG { get; set; }
 
         /// <summary>
         /// P币
@@ -66,6 +76,8 @@ namespace TenBackend.Models.Entities
         /// 能量
         /// </summary>
         public int Energy { get; set; }
+
+
 
         /// <summary>
         /// 头像地址
