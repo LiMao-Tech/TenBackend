@@ -11,7 +11,6 @@ namespace TenBackend.Models.Entities
     {
         [Key]
         public int ID{set;get;}
-
         [Required]
         public int Sender { get; set; }
         [Required]
@@ -21,7 +20,7 @@ namespace TenBackend.Models.Entities
         
         [Column(TypeName = "money")]
         public decimal Amount { get; set; }
-        public DateTime TransTime { get; set; }
+        public long TransTime { get; set; }
         public string Note { get; set; }
 
     }

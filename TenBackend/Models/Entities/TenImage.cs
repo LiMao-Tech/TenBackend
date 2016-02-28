@@ -17,8 +17,7 @@ namespace TenBackend.Models.Entities
         public string BasePath { get; set; }
         public bool IsLocked { get; set; }
         public ImageType ImageType { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime UploadTime { get; set; }
+        public long UploadTime { get; set; }
         public int UserIndex { get; set; }
         public int MsgIndex { get; set; }
     }

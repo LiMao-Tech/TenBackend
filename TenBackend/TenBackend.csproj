@@ -51,9 +51,18 @@
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GetuiServerApiSDK">
+      <HintPath>protobuffer\GetuiServerApiSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.ProtocolBuffers">
+      <HintPath>protobuffer\Google.ProtocolBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>protobuffer\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PushSharp.Amazon.Adm, Version=2.2.1.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
@@ -113,6 +122,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -213,8 +223,10 @@
     <Compile Include="Controllers\BindInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageUnlockerController.cs" />
+    <Compile Include="Controllers\KeFu\KeFuController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PCoinTransController.cs" />
+    <Compile Include="Controllers\PurchaseController.cs" />
     <Compile Include="Controllers\RaterController.cs" />
     <Compile Include="Controllers\TenImageController.cs" />
     <Compile Include="Controllers\TenLoginsController.cs" />
@@ -226,10 +238,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Assitants\Commons.cs" />
+    <Compile Include="Models\Assitants\UserSummary.cs" />
+    <Compile Include="Models\Entities\Admin\User.cs" />
     <Compile Include="Models\Entities\BindInfo.cs" />
+    <Compile Include="Models\Entities\Purchase.cs" />
     <Compile Include="Models\Entities\Rater.cs" />
+    <Compile Include="Models\Tools\GeTuiPush.cs" />
     <Compile Include="Models\Tools\HashEncrypt.cs" />
     <Compile Include="Models\Assitants\ImageType.cs" />
     <Compile Include="Models\Entities\ImageUnlocker.cs" />
@@ -243,6 +258,7 @@
     <Compile Include="Models\Entities\TenMsg.cs" />
     <Compile Include="Models\Entities\TenUser.cs" />
     <Compile Include="Models\Assitants\UserDetails.cs" />
+    <Compile Include="Models\Tools\TimeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -251,13 +267,16 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\jquery.dataTables.min.css" />
+    <Content Include="Content\KeFu\login.css" />
     <Content Include="Content\metisMenu.min.css" />
     <Content Include="Content\sb-admin-2.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="images\limao_icon.png" />
+    <Content Include="images\login-back.jpg" />
+    <Content Include="images\logo.png" />
+    <Content Include="Scripts\admin.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -294,6 +313,7 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\metisMenu.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\mytools.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sb-admin-2.js" />
@@ -326,6 +346,7 @@
     <Content Include="Views\Notification\Edit.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Validate\Email.cshtml" />
+    <Content Include="Views\KeFu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

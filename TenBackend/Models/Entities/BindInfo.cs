@@ -14,7 +14,7 @@ namespace TenBackend.Models.Entities
         public int PhoneNumber{set;get;}
         public bool PhoneState {set;get;}
         public string EmailAddress{set;get;}
-        public DateTime EmailTime { set; get; }
+        public long EmailTime { set; get; }
         public string ValidateStr { set; get; }
         public bool EmailState{set;get;}
 

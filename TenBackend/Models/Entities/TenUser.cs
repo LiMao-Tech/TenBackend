@@ -37,8 +37,7 @@ namespace TenBackend.Models.Entities
         /// <summary>
         /// 生日
         /// </summary>
-        [Column(TypeName = "date")]
-        public DateTime Birthday { get; set; }
+        public long Birthday { get; set; }
 
         /// <summary>
         /// 注册时间
@@ -76,9 +75,6 @@ namespace TenBackend.Models.Entities
         /// 能量
         /// </summary>
         public int Energy { get; set; }
-
-
-
         /// <summary>
         /// 头像地址
         /// </summary>

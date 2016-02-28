@@ -16,6 +16,11 @@ namespace TenBackend.Models.Assitants
         public static byte MSG_TYPE_IMAGE = 1;
         public static byte MSG_TYPE_PCOIN = 2;
 
+        public const int PURCHASE_TYPE_APPLE = 0 ;
+        public const int PURCHASE_TYPE_UNLOCK_LEVEL = 1;
+        public const int PURCHASE_TYPE_UNLOCK_IMAGE = 2;
+        public const int PURCHASE_TYPE_PCOIN_TRANS = 3;
+
         public static string TEN_HOME = "http://www.limao-tech.com/Ten/";
     }
 }

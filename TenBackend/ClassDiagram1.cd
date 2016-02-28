@@ -17,14 +17,14 @@
   <Class Name="TenBackend.Controllers.TenImageController" Collapsed="true">
     <Position X="2.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAABCASAAgAAAAAAAAAAAAEAAACAAECgAAAgAE=</HashCode>
+      <HashCode>QAAAAIAABCCSAAgAAAAAAAkAAAQkAAACABECgAAAkAE=</HashCode>
       <FileName>Controllers\TenImageController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TenBackend.Controllers.PCoinTransController" Collapsed="true">
     <Position X="2.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAEAAABCAQgAAAAQAABABAABAAAAQAABAAAIUEAAA=</HashCode>
+      <HashCode>AAAAAAAAACAQAAAAAAAAAABAAAAAAAAAABAAAIQEAAA=</HashCode>
       <FileName>Controllers\PCoinTransController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -66,7 +66,7 @@
   <Class Name="TenBackend.Models.Entities.TenUser" Collapsed="true">
     <Position X="0.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAgACBQAAEBAgAgCAIAFQAAQAAAAAAAAg=</HashCode>
+      <HashCode>AAAAEAAAAAAAgACBQAAUBAgAgCAIAFQACQAAAAAAAAg=</HashCode>
       <FileName>Models\Entities\TenUser.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -89,6 +89,13 @@
     <TypeIdentifier>
       <HashCode>AAABAAAgACAQAAAAEAAAAAAAQAAAAAAAAAAIAgAAIAA=</HashCode>
       <FileName>Controllers\BindInfoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TenBackend.Controllers.PurchaseController" Collapsed="true">
+    <Position X="2.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAACARAAAAAAAAABAAAAAAAAAAAAAAAEAQAAA=</HashCode>
+      <FileName>Controllers\PurchaseController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Microsoft YaHei UI" Size="9" />

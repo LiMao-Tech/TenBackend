@@ -64,5 +64,15 @@ namespace TenBackend.Models.Tools
            
         }
 
+        public void SendPassword(string recEmail, string password)
+        {
+            string content = new StringBuilder("您现在的密码是:")
+               .Append(password)
+               .Append(",请妥善保管!!")
+               .ToString();
+
+            client.Send(EMAIL_ACCOUT, recEmail, "Ten密码找回", content);
+        }
+
     }
 }

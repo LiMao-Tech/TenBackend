@@ -21,7 +21,8 @@ namespace TenBackend.Controllers
         // GET: /User/
         public ActionResult Index()
         {
-            return View(db.TenLogins.ToList());
+            
+            return View();
         }
 
         public ActionResult ShowPhotos(int? id)

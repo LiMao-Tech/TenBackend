@@ -36,7 +36,8 @@ $(function() {
 });
 
 $(function () {
-    $('#table_id').DataTable();
+
+   
 });
 
 

@@ -7,6 +7,7 @@ using TenBackend.Models.Entities;
 using TenBackend.Models.Assitants;
 using TenBackend.Models.PDL;
 using TenBackend.Models.Tools.PushHelpers;
+using TenBackend.Models.Tools;
 
 namespace TenBackend.Controllers
 {
@@ -53,18 +54,30 @@ namespace TenBackend.Controllers
             {
                 tenmsg.Sender = 0;
                 tenmsg.Receiver = 0;
-                tenmsg.MsgType = 0;
+                tenmsg.MsgType = Commons.MSG_TYPE_SYSTEM;
                 tenmsg.IsLocked = false;
-                tenmsg.MsgTime = DateTime.Now;
+                tenmsg.MsgTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
 
                 db.TenMsgs.Add(tenmsg);
                 db.SaveChanges();
 
-                    foreach (TenUser u in db.TenUsers.Where(e => e.PhoneType == 0))
+                foreach (TenLogin login in db.TenLogins)
+                {
+                    if (login.UserIndex != 0 && login.DeviceToken != null)
                     {
-                        TenLogin tenlogin = db.TenLogins.Where(e => e.UserIndex == u.UserIndex).FirstOrDefault();
-                        TenPushBroker.GetInstance().SendNotification2Apple(tenlogin.DeviceToken, tenmsg.MsgContent);
+                        TenUser u = db.TenUsers.Find(login.UserIndex);
+                        if (u.PhoneType == Commons.PHONE_TYPE_IPHONE)
+                        {
+                            TenPushBroker.GetInstance().SendNotification2Apple(login.DeviceToken, tenmsg.MsgContent);
+                        }
+                        else
+                        {
+                            GeTuiPush.GetInstance().PushMessageToSingle("Ten", tenmsg.MsgContent, "", login.DeviceToken);
+                        }
+                        
                     }
+                }
+                    
                    
                 return RedirectToAction("Index");
             }

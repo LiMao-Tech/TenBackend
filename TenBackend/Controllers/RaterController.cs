@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using TenBackend.Models.Assitants;
 using TenBackend.Models.Entities;
 using TenBackend.Models.PDL;
+using TenBackend.Models.Tools;
 using TenBackend.Models.Tools.PushHelpers;
 
 namespace TenBackend.Controllers
@@ -157,7 +158,7 @@ namespace TenBackend.Controllers
             tenmsg.Sender = Commons.MSG_TYPE_SYSTEM;
             tenmsg.Receiver = rater.UserIndex;
             tenmsg.PhoneType = tenuser.PhoneType;
-            tenmsg.MsgTime = DateTime.Now;
+            tenmsg.MsgTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
             tenmsg.MsgContent =  msgcontent.ToString();
             db.TenMsgs.Add(tenmsg);
             db.SaveChanges();
@@ -168,7 +169,7 @@ namespace TenBackend.Controllers
             }
             else if (tenuser.PhoneType == Commons.PHONE_TYPE_ANDROID)
             {
-
+                GeTuiPush.GetInstance().PushMessageToSingle("新的评分", tenmsg.MsgContent, "", tenlogin.DeviceToken);
             }
 
 

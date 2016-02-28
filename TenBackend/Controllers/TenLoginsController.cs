@@ -35,12 +35,15 @@ namespace TenBackend.Controllers
 
 
         /// <summary>
-        /// 获取所有TenLogin信息
+        /// 获取所有有效TenLogin信息
         /// </summary>
         // GET api/TenLogins
         public IQueryable<TenLogin> GetTenLogins()
         {
-            return db.TenLogins;
+            var tenLogins = from login in db.TenLogins
+                            where (login.UserIndex != 0)
+                            select login;
+            return tenLogins;
         }
 
         // GET api/TenLogins/5
@@ -76,21 +79,21 @@ namespace TenBackend.Controllers
             return Ok(tenlogin);
         }
 
-        // POST: api/TenLogins/5
-        /// <summary>
-        /// Get the password（invalid）
-        /// </summary>
-        [ResponseType(typeof(string))]
-        public IHttpActionResult PostTenLogin(string userID)
-        {
-            TenLogin tenlogin = db.TenLogins.Where(l=>l.UserID == userID).FirstOrDefault();
-            if(tenlogin == null){
-                //用户不存在
-                return NotFound();
-            }
+        //// POST: api/TenLogins/5
+        ///// <summary>
+        ///// Get the password（invalid）
+        ///// </summary>
+        //[ResponseType(typeof(string))]
+        //public IHttpActionResult PostTenLogin(string userID)
+        //{
+        //    TenLogin tenlogin = db.TenLogins.Where(l=>l.UserID == userID).FirstOrDefault();
+        //    if(tenlogin == null){
+        //        //用户不存在
+        //        return NotFound();
+        //    }
 
-            return Ok(tenlogin.UserPWD);
-        }
+        //    return Ok(tenlogin.UserPWD);
+        //}
          // GET: api/TenLogins/5
         /// <summary>
         /// 用户登录
@@ -139,7 +142,7 @@ namespace TenBackend.Controllers
 
             try
             {
-                tenLogin.LastLogin = DateTime.Parse(lastLogin);
+                tenLogin.LastLogin = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
             }
             catch (Exception e)
             {
@@ -175,7 +178,28 @@ namespace TenBackend.Controllers
             }
             return Ok(tenlogin);
         }
-       
+
+
+        /// <summary>
+        /// 找回密码。密码会发送到绑定邮箱，若未绑定邮箱返回状态码403,正常返回204
+        /// </summary>
+        [ResponseType(typeof(TenLogin))]
+        public IHttpActionResult GetTenLogin(int loginIndex,string item = "forgetPassword")
+        {
+            TenLogin tenlogin = db.TenLogins.Find(loginIndex);
+            string password = tenlogin.UserPWD;
+            BindInfo bindInfo = db.BindInfoes.Where(info => info.LoginIndex == loginIndex && info.EmailState == true).FirstOrDefault();
+            if (bindInfo != null)
+            {
+                TenEmailHelper.GetInstance().SendPassword(bindInfo.EmailAddress,password);
+                return StatusCode(HttpStatusCode.NoContent);
+            }
+            else
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+           
+        }
 
         // PUT api/TenLogins/5
         /// <summary>
@@ -261,11 +285,17 @@ namespace TenBackend.Controllers
             }
 
             TenLogin t = db.TenLogins.Where(e => e.UserID == tenlogin.UserID).FirstOrDefault();
-            if (t != null)
+            if (t != null && t.UserIndex != 0)
             {
                 return StatusCode(HttpStatusCode.Unauthorized);//用户存在
             }
-
+            else if (t != null && t.UserIndex == 0)
+            {
+                db.TenLogins.Remove(t);
+                db.SaveChanges();
+            }
+            
+           
             db.TenLogins.Add(tenlogin);
             db.SaveChanges();
 

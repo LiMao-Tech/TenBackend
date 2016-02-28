@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TenBackend.Models.Entities.TenLogin>
+﻿
 
 @{
     ViewBag.Title = "UserInfo";
@@ -22,61 +22,25 @@
                     <thead>
                         <tr role="row">
                             <th>
-                                @Html.DisplayNameFor(model => model.LoginIndex)
+                                头像
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.UserIndex)
+                                账号
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.UserID)
+                               上次登录
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.UserPWD)
+                                DeviceUUID
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.LastLogin)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.DeviceUUID)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.DeviceToken)
+                                DeviceToken
                             </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr role="row">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.LoginIndex)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserIndex)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserPWD)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.LastLogin)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeviceUUID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeviceToken)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.LoginIndex }) |
-                                    @Html.ActionLink("Details", "Details", new { id = item.LoginIndex }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.LoginIndex })
-                                </td>
-                            </tr>
-                        }
+                    
                     </tbody>
 
                 </table>
@@ -87,6 +51,64 @@
     </div>
 
 </div>
- 
+
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/dataTable")
+
+<script>
+    $(function () {
+            var t = $('#table_id').DataTable();
+       
+            $.getJSON("./api/TenLogins", function (result) {
+                //  console.log("offset:"+new Date().getTimezoneOffset());
+                $.each(result, function (i, field) {
+                    if (result[i]["UserIndex"] != 0) {
+
+                        var lastLogin = result[i]["LastLogin"] * 1000 - new Date().getTimezoneOffset() * 3600 * 1000;
+                        t.row.add([
+                            "<img src='" + "http://www.limao-tech.com/Ten/TenImage/GetProfileByUser?userIndex=" + result[i]["UserIndex"] + "'width='100' height='100'/>",
+                            result[i]["UserID"],
+                            new Date(lastLogin),
+                            result[i]["DeviceUUID"],
+                            result[i]["DeviceToken"],
+                            "<a href='./User/Details?id=" + result[i]["LoginIndex"] + "'>Details</a>"
+                        ]).draw(true);
+                    /*
+                        $("tbody").append(
+                            "<tr role='row'>"
+                            + "<td>"
+                            + "<img src='" + "http://www.limao-tech.com/Ten/TenImage/GetProfileByUser?userIndex=" + result[i]["UserIndex"] + "'width='100' height='100'/>"
+                            + "</td>"
+                            + "<td>"
+                            + result[i]["UserID"]
+                            + "</td>"
+                            + "<td>"
+                            + new Date(lastLogin)
+                            + "</td>"
+                            + "<td>"
+                            + result[i]["DeviceUUID"]
+                            + "</td>"
+                            + "<td>"
+                            + result[i]["DeviceToken"]
+                            + "</td>"
+                            + "<td>"
+                            +  "<a href='./User/Details?id="+result[i]["LoginIndex"]+"'>Details</a>"
+                            + "</td>"
+                            + "</tr>");
+                            */
+                    }
+                });
+               // $('#table_id').DataTable();
+            });
+
+           
+   
+
+    });
+
+</script>
+
 
 

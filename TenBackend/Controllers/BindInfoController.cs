@@ -137,7 +137,7 @@ namespace TenBackend.Controllers
                 BindInfo bindinfo = new BindInfo();
                 bindinfo.LoginIndex = loginIndex;
                 bindinfo.EmailAddress = email;
-                bindinfo.EmailTime = DateTime.Now;
+                bindinfo.EmailTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
                 bindinfo.EmailState = false;
                 bindinfo.ValidateStr = Guid.NewGuid().ToString();
                 db.BindInfoes.Add(bindinfo);
@@ -149,7 +149,7 @@ namespace TenBackend.Controllers
             }else{
                 //重新申请的绑定请求
                 info.EmailAddress = email;
-                info.EmailTime = DateTime.Now;
+                info.EmailTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
                 info.ValidateStr = Guid.NewGuid().ToString();
                 db.Entry(info).State = EntityState.Modified;
                 db.SaveChanges();

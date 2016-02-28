@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using TenBackend.Models.Entities;
 using TenBackend.Models.PDL;
+using TenBackend.Models.Tools;
 
 namespace TenBackend.Controllers
 {
@@ -19,6 +20,9 @@ namespace TenBackend.Controllers
         {
             return View();
         }
+
+
+        
 
         public ActionResult Email(string email, string validate)
         {
@@ -37,7 +41,7 @@ namespace TenBackend.Controllers
             }
 
             //验证过期
-            if (bindinfo.EmailTime.AddHours(24).Ticks < DateTime.Now.Ticks)
+            if (TimeUtils.UnixTimestampToDateTime(new DateTime(), bindinfo.EmailTime).AddHours(24).Ticks < DateTime.UtcNow.Ticks)
             {
                 ViewBag.message = "您的验证已过期，请重新申请绑定！！！";
                 return View();

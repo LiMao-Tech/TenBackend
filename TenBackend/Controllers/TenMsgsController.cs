@@ -18,6 +18,7 @@ using TenBackend.Models.Entities;
 using TenBackend.Models.Assitants;
 using TenBackend.Models.PDL;
 using TenBackend.Models.Tools.PushHelpers;
+using TenBackend.Models.Tools;
 
 namespace TenBackend.Controllers
 {
@@ -25,6 +26,12 @@ namespace TenBackend.Controllers
     {
        
         private TenBackendDbContext db = new TenBackendDbContext();
+
+        public IHttpActionResult GetTenMsgs(string clientId)
+        {
+            GeTuiPush.GetInstance().PushMessageToSingle("Ten", "Wlecome to join", "http://www.limao-tech.com/Ten/TenImage?id=2&tumbnail=true", clientId);
+            return Ok();
+        }
 
         // GET api/TenMsgs
         /// <summary>
@@ -167,6 +174,8 @@ namespace TenBackend.Controllers
                 return BadRequest(ModelState);
             }
 
+            tenmsg.MsgTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
+
             db.TenMsgs.Add(tenmsg);
             db.SaveChanges();
 
@@ -192,7 +201,17 @@ namespace TenBackend.Controllers
             }
             else if (tenmsg.PhoneType == Commons.PHONE_TYPE_ANDROID) // Android
             {
-
+                TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == tenmsg.Receiver).FirstOrDefault();
+                if (tenmsg.Sender == 0)
+                {
+                    GeTuiPush.GetInstance().PushMessageToSingle("Ten", tenmsg.MsgContent, "", targetLogin.DeviceToken);
+                }
+                else
+                {
+                    TenUser u = db.TenUsers.Find(tenmsg.Sender);
+                    GeTuiPush.GetInstance().PushMessageToSingle(u.UserName, tenmsg.MsgContent, u.ProfileUrl, targetLogin.DeviceToken);
+                }
+               
             }
 
             return CreatedAtRoute("DefaultApi", new { id = tenmsg.MsgIndex }, tenmsg);

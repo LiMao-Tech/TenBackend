@@ -31,10 +31,23 @@ namespace TenBackend
                       "~/Content/site.css",                   
                       "~/Content/font-awesome.min.css",
                       "~/Content/jquery.dataTables.min.css",
-                      "~/Content/metisMenu.min.css",
-                       "~/Content/sb-admin-2.css"));
+                      "~/Content/metisMenu.min.css"));
             //User template Scripts
             bundles.Add(new ScriptBundle("~/bundles/sb-admin-2").Include("~/Scripts/sb-admin-2.js"));
+            //Admmin.js
+            bundles.Add(new ScriptBundle("~/bundles/admin").Include("~/Scripts/admin.js"));
+            //mytools.js
+            bundles.Add(new ScriptBundle("~/bundles/mytools").Include("~/Scripts/mytools.js"));
+
+
+            //KeFu Login CSS
+            bundles.Add(new StyleBundle("~/Content/css/kefu-login").Include(
+                    "~/Content/KeFu/login.css"
+                   ));
+
+            bundles.Add(new StyleBundle("~/Content/css/sbadmin").Include(
+                      "~/Content/sb-admin-2.css"));
+             
         }
     }
 }

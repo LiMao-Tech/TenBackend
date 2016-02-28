@@ -39,7 +39,7 @@ namespace TenBackend.Models.Entities
         /// <summary>
         /// 消息时间
         /// </summary>
-        public DateTime MsgTime { get; set; }
+        public long MsgTime { get; set; }
 
         /// <summary>
         /// 消息内容

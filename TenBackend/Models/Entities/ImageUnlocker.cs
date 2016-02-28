@@ -31,7 +31,6 @@ namespace TenBackend.Models.Entities
         /// <summary>
         /// 解锁时间
         /// </summary>
-        [Column(TypeName = "date")]
-        public DateTime UnlockTime { set; get; }
+        public long UnlockTime { set; get; }
     }
 }

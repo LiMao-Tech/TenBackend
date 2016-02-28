@@ -20,8 +20,8 @@ namespace TenBackend.Controllers
     public class TenImageController : Controller
     {
         static string IMAGE_PATH = "D:\\TenImages";
-        static string ORIGINAL = "\\Original";
-        static string THUMBNAIL = "\\Thumbnail";
+        static string ORIGINAL = "Original";
+        static string THUMBNAIL = "Thumbnail";
         static string SEND_IMAGE_STR = "给你发送了张图片";
         private TenBackendDbContext db = new TenBackendDbContext();
 
@@ -58,7 +58,7 @@ namespace TenBackend.Controllers
                 if (profile != null)
                 {
                     profile.ContentType = upload.ContentType;
-                    profile.UploadTime = DateTime.Now;
+                    profile.UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
 
                     //覆盖
                     String src = Path.Combine(profile.BasePath, ORIGINAL, profile.FileName);
@@ -84,7 +84,7 @@ namespace TenBackend.Controllers
                         BasePath = Path.Combine(IMAGE_PATH),
                         IsLocked = false,
                         ImageType = ImageType.Profile,
-                        UploadTime = DateTime.Now,
+                        UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow),
                         UserIndex = id
                     };
                     String src =  Path.Combine(newProfile.BasePath,ORIGINAL, newProfile.FileName);
@@ -107,6 +107,81 @@ namespace TenBackend.Controllers
             return Json("noUpload");
         }
 
+
+        //public ActionResult Set2Profile(int userIndex,int id)
+        //{
+        //    try
+        //    {
+                            
+        //    TenImage photo = db.TenImages.Find(id);
+
+        //    //若profile1不存在，先修改为profile1
+        //    TenImage profile1 = db.TenImages.Where(i => i.UserIndex == userIndex && i.ImageType == ImageType.Profile1).FirstOrDefault();
+        //    if (profile1 == null)
+        //    {
+        //        var newProfile = new TenImage
+        //        {
+        //            FileName = photo.FileName,
+        //            ContentType = photo.ContentType,
+        //            BasePath = photo.BasePath,
+        //            IsLocked = false,
+        //            ImageType = ImageType.Profile1,
+        //            UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow),
+        //            UserIndex = userIndex
+        //        };
+        //        db.TenImages.Add(newProfile);
+        //        db.SaveChanges();
+        //    }
+        //    else
+        //    {
+        //        //若Profile1存在,Profile2不存在，则修改Profile2
+        //        TenImage profile2 = db.TenImages.Where(i => i.UserIndex == userIndex && i.ImageType == ImageType.Profile2).FirstOrDefault();
+        //        if (profile2 == null)
+        //        {
+        //            var newProfile = new TenImage
+        //            {
+        //                FileName = photo.FileName,
+        //                ContentType = photo.ContentType,
+        //                BasePath = photo.BasePath,
+        //                IsLocked = false,
+        //                ImageType = ImageType.Profile2,
+        //                UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow),
+        //                UserIndex = userIndex
+        //            };
+        //            db.TenImages.Add(newProfile);
+        //            db.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            //若Profile1/2都存在则修改较早的一张
+        //            long offset = profile1.UploadTime - profile2.UploadTime;
+        //            if (offset > 0)
+        //            {
+        //                profile2.FileName = photo.FileName;
+        //                profile2.ContentType = photo.ContentType;
+        //                profile2.BasePath = photo.BasePath;
+        //                profile2.UploadTime =  TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
+        //                db.Entry(profile2).State = EntityState.Modified;
+        //                db.SaveChanges();
+        //            }else{
+        //                profile1.FileName = photo.FileName;
+        //                profile1.ContentType = photo.ContentType;
+        //                profile1.BasePath = photo.BasePath;
+        //                profile1.UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
+        //                db.Entry(profile1).State = EntityState.Modified;
+        //                db.SaveChanges();
+        //            }
+        //        }
+        //    }
+        
+        //    }catch(Exception e){
+        //        return Json(e.ToString());
+        //    }
+            
+        
+        //    return Json("success");
+        //}
+
         /// <summary>
         /// 获取用户头像
         /// </summary>
@@ -115,6 +190,7 @@ namespace TenBackend.Controllers
         {
 
             var imageToRetrieve = db.TenImages.Where(img => img.UserIndex == userIndex && img.ImageType == ImageType.Profile).FirstOrDefault();
+
             if (thumbnail)
             {
                 FileStream fileStream = new FileStream(Path.Combine(imageToRetrieve.BasePath,THUMBNAIL, imageToRetrieve.FileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -148,7 +224,7 @@ namespace TenBackend.Controllers
                         BasePath = Path.Combine(IMAGE_PATH),
                         IsLocked = false,
                         ImageType = ImageType.Photo,
-                        UploadTime = DateTime.Now,
+                        UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow),
                         UserIndex = id
                     };
 
@@ -162,7 +238,11 @@ namespace TenBackend.Controllers
                     db.SaveChanges();
                 }
 
-                return Json("success");
+                var images = from img in db.TenImages
+                             where (img.UserIndex == id) && (img.ImageType != ImageType.Message)
+                             select img;
+
+                return Json(images);
 
             }
 
@@ -174,10 +254,9 @@ namespace TenBackend.Controllers
         /// </summary>
         /// <param name="sender">发送人</param>
         /// <param name="receiver">接收人</param>
-        /// <param name="time">发送时间</param>
         /// <param name="phoneType">手机类型</param>
         /// <param name="upload">图片文件</param>
-        public JsonResult SendImage(int sender, int receiver, DateTime time, byte phoneType,HttpPostedFileBase upload)
+        public JsonResult SendImage(int sender, int receiver, byte phoneType,HttpPostedFileBase upload)
         {
              if (upload != null && upload.ContentLength > 0)
             {
@@ -190,7 +269,7 @@ namespace TenBackend.Controllers
                         BasePath = Path.Combine(IMAGE_PATH),
                         IsLocked = false,
                         ImageType = ImageType.Message,
-                        UploadTime = time,
+                        UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow),
                         UserIndex = sender,
                         MsgIndex = -1
                     };
@@ -216,11 +295,11 @@ namespace TenBackend.Controllers
                     TenMsg tenmsg = new TenMsg();
                     tenmsg.Sender = sender;
                     tenmsg.Receiver = receiver;
-                    tenmsg.MsgTime = time;
+                    tenmsg.MsgTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
                     tenmsg.MsgType = Commons.MSG_TYPE_IMAGE;
                     tenmsg.PhoneType = phoneType;
                     tenmsg.MsgContent = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(tenimage.ID).Append("&thumbnail=true").ToString();
-                    tenmsg.IsLocked = false;
+                    tenmsg.IsLocked = true;
                     db.TenMsgs.Add(tenmsg);
                     db.SaveChanges();
                     
@@ -247,7 +326,7 @@ namespace TenBackend.Controllers
         /// 删除照片
         /// </summary>
         /// <param name="id">图片ID</param>
-        [HttpPost]
+        [HttpDelete]
         public JsonResult DeletePhoto(int id)
         {
             try
@@ -269,7 +348,12 @@ namespace TenBackend.Controllers
                 }
                 db.TenImages.Remove(image);
                 db.SaveChanges();
-                return Json("success");
+
+                var images = from img in db.TenImages
+                             where (img.UserIndex == image.UserIndex) && (img.ImageType != ImageType.Message)
+                             select img;
+                return Json(images);
+               
             }
             catch (Exception e)
             {
@@ -279,16 +363,41 @@ namespace TenBackend.Controllers
         }
 
         /// <summary>
-        /// 获取用户图片信息
+        /// 获取所有用户图片信息
         /// </summary>
         /// <param name="id">用户ID</param>
         public JsonResult GetImagesByUser(int id)
         {
             var images = from img in db.TenImages
-                         where img.UserIndex == id
+                         where img.UserIndex == id 
                          select img;
             return Json(images, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// 获取用户头像图片信息
+        /// </summary>
+        /// <param name="id">用户ID</param>
+        public JsonResult GetProfileImages(int id)
+        {
+            var images = from img in db.TenImages
+                         where (img.UserIndex == id) && (img.ImageType != ImageType.Message) && (img.ImageType != ImageType.Photo) 
+                         select img;
+            return Json(images, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 获取用户相册图片信息
+        /// </summary>
+        /// <param name="id">用户ID</param>
+        public JsonResult GetAlbumImages(int id)
+        {
+            var images = from img in db.TenImages
+                         where (img.UserIndex == id) && (img.ImageType != ImageType.Message)
+                         select img;
+            return Json(images, JsonRequestBehavior.AllowGet);
+        }
+
 
         /// <summary>
         /// 获取图片
@@ -328,7 +437,7 @@ namespace TenBackend.Controllers
                     BasePath = Path.Combine(IMAGE_PATH),
                     IsLocked = false,
                     ImageType = ImageType.Message,
-                    UploadTime = DateTime.Now,
+                    UploadTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow),
                     MsgIndex = id
                 };
                 upload.SaveAs(Path.Combine(image.BasePath, image.FileName));
@@ -338,6 +447,154 @@ namespace TenBackend.Controllers
                 return Json(image);
             }
             return Json("noImage");
+        }
+
+        /// <summary>
+        /// 改变图片isLocked状态
+        /// </summary>
+        /// <param name="id">照片ID</param>
+        /// <param name="isLocked">true 或者 false</param>
+        [HttpPost]
+        public ActionResult SetIsLocked(int id, bool isLocked)
+        {
+            TenImage tenimage = db.TenImages.Find(id);
+            tenimage.IsLocked = isLocked;
+            db.Entry(tenimage).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+                var images = from img in db.TenImages
+                             where (img.UserIndex == tenimage.UserIndex) && (img.ImageType != ImageType.Message)
+                             select img;
+                return Json(images);
+                
+            }
+            catch (Exception e)
+            {
+                TenImage img = db.TenImages.Find(id);
+                if (img == null)
+                {
+                    return HttpNotFound();
+                }
+                return Json(e.ToString());
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// 更改ImageType
+        /// </summary>
+        /// <param name="id">照片ID</param>
+        /// <param name="imagetype">0为Profile1,3为Profile2,4为Profile3,1为普通照片</param>
+        [HttpPost]
+        public ActionResult ChangeImageType(int id, ImageType imagetype)
+        {
+            TenImage tenimage = db.TenImages.Find(id);
+
+            if (imagetype == ImageType.Profile1 || imagetype == ImageType.Profile2 || imagetype == ImageType.Profile)
+            {
+                //复位原来对应的头像
+               TenImage profile = db.TenImages.Where(i => i.ImageType == imagetype && i.UserIndex == tenimage.UserIndex).FirstOrDefault();
+               if (profile != null)
+               {
+                   profile.ImageType = ImageType.Photo;
+                   db.Entry(profile).State = EntityState.Modified;
+               }
+               
+
+                //修改TenUser的ProfileUrl
+               if (imagetype == ImageType.Profile)
+               {
+                   TenUser tenuser = db.TenUsers.Find(tenimage.UserIndex);
+                   tenuser.ProfileUrl = new StringBuilder("http://www.limao-tech.com/Ten/TenImage?id=").Append(tenimage.ID).Append("&tumbnail=true").ToString();
+                   db.Entry(tenuser).State = EntityState.Modified;
+               }
+
+                //修改对应的Profile
+               tenimage.ImageType = imagetype;
+               db.Entry(tenimage).State = EntityState.Modified;
+
+            }
+            else if (imagetype == ImageType.Photo)
+            {
+                tenimage.ImageType = imagetype;
+                db.Entry(tenimage).State = EntityState.Modified;
+            }
+
+
+            try
+            {
+                db.SaveChanges();
+                var images = from img in db.TenImages
+                             where (img.UserIndex == tenimage.UserIndex) && (img.ImageType != ImageType.Message)
+                             select img;
+                return Json(images);
+            }
+            catch (Exception e)
+            {
+                TenImage img = db.TenImages.Find(id);
+                if (img == null)
+                {
+                    return HttpNotFound();
+                }
+                return Json(e.ToString());
+            } 
+                     
+            
+        }
+
+
+
+
+
+        /// <summary>
+        /// 修改整个TenImage实体，注意需要每一个Field
+        /// </summary>
+        [HttpPut]
+        public ActionResult PutTenImage(TenImage tenimage)
+        {
+
+            //if (tenimage.FileName == null)
+            //    tenimage.FileName = img.FileName;
+            //if (tenimage.ContentType == null)
+            //    tenimage.ContentType = img.ContentType;
+            //if (tenimage.BasePath == null)
+            //    tenimage.BasePath = img.BasePath;
+            //if (tenimage.IsLocked == null)
+            //    tenimage.IsLocked = img.IsLocked;
+            //if (tenimage.ImageType == null)
+            //    tenimage.ImageType = img.ImageType;
+            //if (tenimage.UploadTime == null)
+            //    tenimage.UploadTime = img.UploadTime;
+            //if (tenimage.UserIndex == null)
+            //    tenimage.UserIndex = img.UserIndex;
+            //if (tenimage.MsgIndex == null)
+            //    tenimage.MsgIndex = img.MsgIndex;
+
+            db.Entry(tenimage).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+                var images = from img in db.TenImages
+                             where (img.UserIndex == tenimage.UserIndex) && (img.ImageType != ImageType.Message)
+                             select img;
+                return Json(images);
+            }
+            catch (Exception e)
+            {
+                TenImage img = db.TenImages.Find(tenimage.ID);
+                if (img == null)
+                {
+                    return HttpNotFound();
+                }
+                    return Json(e.ToString());
+            }
+
+        
         }
 
         private void ChangeUserProfile(int id)

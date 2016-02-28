@@ -17,6 +17,7 @@ using TenBackend.Models.Entities;
 using TenBackend.Models.Assitants;
 using TenBackend.Models.PDL;
 using TenBackend.Models.Tools.PushHelpers;
+using TenBackend.Models.Tools;
 
 namespace TenBackend.Controllers
 {
@@ -106,7 +107,7 @@ namespace TenBackend.Controllers
                 return BadRequest(ModelState);
             }
 
-            
+            pcointrans.TransTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
 
             //更新用户Pcoin信息
             TenUser uSender = db.TenUsers.Find(pcointrans.Sender);
@@ -132,27 +133,27 @@ namespace TenBackend.Controllers
             {
                 return BadRequest("failed, details:" + e.ToString());
             }
-            
+
+            TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == pcointrans.Receiver).FirstOrDefault();
+
+            TenMsg tenmsg = new TenMsg();
+            tenmsg.MsgType = Commons.MSG_TYPE_PCOIN;
+            tenmsg.Sender = pcointrans.Sender;
+            tenmsg.Receiver = pcointrans.Receiver;
+            tenmsg.MsgContent = pcointrans.Amount.ToString();
+            tenmsg.MsgTime = TimeUtils.DateTimeToUnixTimestamp(DateTime.UtcNow);
+            db.TenMsgs.Add(tenmsg);
+            db.SaveChanges();
+            String content = new StringBuilder().Append(uSender.UserName).Append("赠送了您").Append(pcointrans.Amount).Append("P币").ToString();
 
             //发送通知
             if (pcointrans.PhoneType == Commons.PHONE_TYPE_IPHONE)
-            {
-                TenLogin targetLogin = db.TenLogins.Where(tl => tl.UserIndex == pcointrans.Receiver).FirstOrDefault();
-
-                TenMsg tenmsg = new TenMsg();
-                tenmsg.MsgType = Commons.MSG_TYPE_PCOIN;
-                tenmsg.Sender = pcointrans.Sender;
-                tenmsg.Receiver = pcointrans.Receiver;
-                tenmsg.MsgContent = pcointrans.Amount.ToString();
-                tenmsg.MsgTime = DateTime.Now;
-                db.TenMsgs.Add(tenmsg);
-                db.SaveChanges();
-                String content = new StringBuilder().Append(uSender.UserName).Append("赠送了您").Append(pcointrans.Amount).Append("P币").ToString();
+            {              
                 TenPushBroker.GetInstance().SendNotification2Apple(targetLogin.DeviceToken, content);
             }
             else if (pcointrans.PhoneType == Commons.PHONE_TYPE_ANDROID)
             {
-
+                GeTuiPush.GetInstance().PushMessageToSingle("Ten", content, "", targetLogin.DeviceToken);
             }
 
             return CreatedAtRoute("DefaultApi", new { id = pcointrans.ID }, pcointrans);

@@ -36,6 +36,9 @@ namespace TenBackend.Models.PDL
 
         public System.Data.Entity.DbSet<TenBackend.Models.Entities.BindInfo> BindInfoes { get; set; }
 
-      
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.Purchase> Purchases { get; set; }
+
+        public System.Data.Entity.DbSet<TenBackend.Models.Entities.Admin.User> Users { get; set; }
+
     }
 }
