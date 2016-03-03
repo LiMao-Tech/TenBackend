@@ -22,5 +22,14 @@ namespace TenBackend.Models.Assitants
         public const int PURCHASE_TYPE_PCOIN_TRANS = 3;
 
         public static string TEN_HOME = "http://www.limao-tech.com/Ten/";
+
+        public static int TIME_OPTION_NOW = 0;
+        public static int TIME_OPTION_LAST = 1;
+        public static int TIME_OPTION_LAST_2 = 2;
+        public static int TIME_OPTION_ALL = 3;
+
+
+        public static decimal PCOIN_PRICE = 10;//1美元 10 P币
+        public static decimal LEVEL_PRICE = 10;//1级10P，2级20P
     }
 }

@@ -61,6 +61,16 @@ namespace TenBackend.Controllers
             return db.PCoinTrans.Where(p => p.Sender == userindex || p.Receiver == userindex);
         }
 
+        /// <summary>
+        /// 获取用户pcointransIndex之后的转账记录
+        /// </summary>
+        [ResponseType(typeof(IQueryable<PCoinTrans>))]
+        public IQueryable<PCoinTrans> GetPCoinTrans(int userindex,int pcointransIndex)
+        {
+
+            return db.PCoinTrans.Where(p => (p.Sender == userindex || p.Receiver == userindex) && (p.ID > pcointransIndex));
+        }
+
         // PUT api/PCoinTrans/5
         public IHttpActionResult PutPCoinTrans(int id, PCoinTrans pcointrans)
         {

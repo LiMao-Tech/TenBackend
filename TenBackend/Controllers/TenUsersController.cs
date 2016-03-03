@@ -148,7 +148,7 @@ namespace TenBackend.Controllers
             {
                 TenUser tenuser = db.TenUsers.Find(id);
                 decimal offset = tenuser.PCoin - pcoin;
-                if (offset > 0)
+                if (offset >= 0)
                 {
                     tenuser.PCoin = offset;
                     tenuser.AVG = level;

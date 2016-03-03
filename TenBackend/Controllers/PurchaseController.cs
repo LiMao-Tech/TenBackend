@@ -38,6 +38,20 @@ namespace TenBackend.Controllers
            return  db.Purchases.Where(p => p.UserId == tenlogin.UserID &&  p.PurchaseType == purchaseType);
         }
 
+        // GET api/Purchase/5
+        /// <summary>
+        /// 获取该用户purchaseIndex之后的购买记录
+        /// </summary>
+        /// <param name="userIndex">用户账号</param>
+        /// <param name="purchaseIndex">purchaseIndex</param>
+        [ResponseType(typeof(IQueryable<Purchase>))]
+        public IQueryable<Purchase> GetPurchase(int userIndex, int purchaseIndex)
+        {
+            TenLogin tenlogin = db.TenLogins.Where(u => u.UserIndex == userIndex).FirstOrDefault();
+
+            return db.Purchases.Where(p => p.UserId == tenlogin.UserID && p.ID > purchaseIndex);
+        }
+
         // PUT api/Purchase/5
         public IHttpActionResult PutPurchase(int id, Purchase purchase)
         {
